@@ -1,0 +1,345 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Primeway | Under Construction</title>
+    <meta
+      name="description"
+      content="Primeway for Trading and Services, Qatar. Our new website is under construction. Please check back soon."
+    />
+    <meta name="theme-color" content="#fafaf8" />
+    <meta property="og:title" content="Primeway | Under Construction" />
+    <meta
+      property="og:description"
+      content="Our new website is under construction. Please check back soon."
+    />
+    <meta property="og:type" content="website" />
+    <link
+      rel="icon"
+      href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='16' fill='%23141a2e'/%3E%3Cpath d='M21 48V16h14a10 10 0 0 1 0 20H27' fill='none' stroke='%23d9a441' stroke-width='6' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E"
+    />
+    <style>
+      :root {
+        --bg: #fafaf8;
+        --ink: #141a2e;
+        --muted: #6b7280;
+        --gold: #d9a441;
+        --line: #e7e5df;
+      }
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+      html {
+        -webkit-text-size-adjust: 100%;
+      }
+      body {
+        min-height: 100vh;
+        min-height: 100svh;
+        background: var(--bg);
+        color: var(--ink);
+        font-family:
+          ui-sans-serif,
+          system-ui,
+          -apple-system,
+          "Segoe UI",
+          Roboto,
+          "Helvetica Neue",
+          Arial,
+          sans-serif;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+        padding: 48px 24px 64px;
+      }
+
+      /* Construction tape, top and bottom */
+      .tape {
+        position: fixed;
+        left: 0;
+        right: 0;
+        height: 8px;
+        background: repeating-linear-gradient(
+          -45deg,
+          var(--ink) 0 12px,
+          var(--gold) 12px 24px
+        );
+        background-size: 34px 34px;
+        animation: tape 2.4s linear infinite;
+      }
+      .tape.top {
+        top: 0;
+      }
+      .tape.bottom {
+        bottom: 0;
+      }
+      @keyframes tape {
+        to {
+          background-position: 34px 0;
+        }
+      }
+
+      .in {
+        opacity: 0;
+        animation: rise 0.8s cubic-bezier(0.2, 0.7, 0.2, 1) forwards;
+      }
+      @keyframes rise {
+        from {
+          opacity: 0;
+          transform: translateY(10px);
+        }
+        to {
+          opacity: 1;
+          transform: none;
+        }
+      }
+
+      .logo {
+        width: 56px;
+        height: 56px;
+        animation-delay: 0.05s;
+      }
+      .name {
+        margin-top: 18px;
+        font-size: 0.95rem;
+        font-weight: 700;
+        letter-spacing: 0.42em;
+        padding-left: 0.42em;
+        animation-delay: 0.12s;
+      }
+      .sub {
+        margin-top: 6px;
+        font-size: 0.62rem;
+        letter-spacing: 0.28em;
+        padding-left: 0.28em;
+        text-transform: uppercase;
+        color: var(--muted);
+        animation-delay: 0.18s;
+      }
+
+      .tag {
+        margin-top: 48px;
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+        padding: 7px 14px;
+        border: 1px solid var(--line);
+        border-radius: 999px;
+        background: #fff;
+        font-size: 0.7rem;
+        letter-spacing: 0.2em;
+        text-transform: uppercase;
+        color: var(--ink);
+        animation-delay: 0.26s;
+      }
+      .tag i {
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        background: var(--gold);
+        animation: blink 1.6s ease-in-out infinite;
+      }
+      @keyframes blink {
+        50% {
+          opacity: 0.25;
+        }
+      }
+
+      h1 {
+        margin-top: 24px;
+        font-family: ui-serif, Georgia, "Times New Roman", serif;
+        font-weight: 500;
+        font-size: clamp(2rem, 5.6vw, 3.2rem);
+        line-height: 1.15;
+        letter-spacing: -0.01em;
+        text-wrap: balance;
+        animation-delay: 0.34s;
+      }
+      .ar {
+        margin-top: 10px;
+        font-size: 1.15rem;
+        color: #b9852a;
+        animation-delay: 0.4s;
+      }
+      p.lead {
+        margin-top: 16px;
+        max-width: 420px;
+        color: var(--muted);
+        font-size: 1rem;
+        line-height: 1.7;
+        text-wrap: balance;
+        animation-delay: 0.46s;
+      }
+
+      /* Blocks being stacked */
+      .build {
+        margin-top: 44px;
+        width: 132px;
+        height: 96px;
+        animation-delay: 0.54s;
+      }
+      .blk {
+        opacity: 0;
+        transform-box: fill-box;
+        animation: drop 4.8s cubic-bezier(0.2, 0.8, 0.2, 1) infinite;
+      }
+      .b1 {
+        --d: 0s;
+      }
+      .b2 {
+        --d: 0.45s;
+      }
+      .b3 {
+        --d: 0.9s;
+      }
+      .b4 {
+        --d: 1.35s;
+      }
+      .b5 {
+        --d: 1.8s;
+      }
+      .blk {
+        animation-delay: var(--d);
+      }
+      @keyframes drop {
+        0% {
+          opacity: 0;
+          transform: translateY(-16px);
+        }
+        8% {
+          opacity: 1;
+          transform: translateY(0);
+        }
+        80% {
+          opacity: 1;
+          transform: translateY(0);
+        }
+        92%,
+        100% {
+          opacity: 0;
+          transform: translateY(0);
+        }
+      }
+      .ground {
+        stroke: var(--ink);
+        stroke-width: 2;
+        stroke-linecap: round;
+      }
+
+      footer {
+        position: fixed;
+        bottom: 22px;
+        left: 0;
+        right: 0;
+        font-size: 0.74rem;
+        letter-spacing: 0.04em;
+        color: #9a9a94;
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        *,
+        *::before,
+        *::after {
+          animation: none !important;
+        }
+        .in,
+        .blk {
+          opacity: 1;
+        }
+      }
+      @media (max-height: 640px) {
+        footer {
+          position: static;
+          margin-top: 28px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="tape top" aria-hidden="true"></div>
+    <div class="tape bottom" aria-hidden="true"></div>
+
+    <svg
+      class="logo in"
+      viewBox="0 0 64 64"
+      role="img"
+      aria-label="Primeway logo"
+    >
+      <rect width="64" height="64" rx="16" fill="#141a2e" />
+      <path
+        d="M21 48V16h14a10 10 0 0 1 0 20H27"
+        fill="none"
+        stroke="#d9a441"
+        stroke-width="6"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      />
+    </svg>
+    <div class="name in">PRIMEWAY</div>
+    <div class="sub in">For Trading &amp; Services</div>
+
+    <div class="tag in"><i></i> Under construction</div>
+    <h1 class="in">We are building something new.</h1>
+    <div class="ar in" lang="ar" dir="rtl">قريبًا</div>
+    <p class="lead in">
+      Our new website is on its way. Please check back soon.
+    </p>
+
+    <svg class="build in" viewBox="0 0 132 96" aria-hidden="true">
+      <!-- bottom row -->
+      <rect
+        class="blk b1"
+        x="14"
+        y="62"
+        width="32"
+        height="26"
+        rx="4"
+        fill="#141a2e"
+      />
+      <rect
+        class="blk b2"
+        x="50"
+        y="62"
+        width="32"
+        height="26"
+        rx="4"
+        fill="#d9a441"
+      />
+      <rect
+        class="blk b3"
+        x="86"
+        y="62"
+        width="32"
+        height="26"
+        rx="4"
+        fill="#141a2e"
+      />
+      <!-- middle row -->
+      <rect
+        class="blk b4"
+        x="32"
+        y="34"
+        width="32"
+        height="26"
+        rx="4"
+        fill="#d9a441"
+      />
+      <rect
+        class="blk b5"
+        x="68"
+        y="34"
+        width="32"
+        height="26"
+        rx="4"
+        fill="#141a2e"
+      />
+      <line class="ground" x1="6" y1="92" x2="126" y2="92" />
+    </svg>
+
+    <footer>&copy; 2026 Primeway for Trading and Services</footer>
+  </body>
+</html>

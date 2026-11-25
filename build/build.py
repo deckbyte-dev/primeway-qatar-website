@@ -34,6 +34,9 @@ SITE_JSON = ROOT / "site.json"
 INCLUDE_PATTERN = re.compile(r"\{\{\s*include:([\w.\-]+)\s*\}\}")
 CONFIRM_PATTERN = re.compile(r"\[CONFIRM:[^\]]*\]")
 
+# pages that use their own template instead of page.html
+TEMPLATE_BY_URL = {"/": "home.html"}
+
 
 def parse_frontmatter(raw: str) -> tuple[dict, str]:
     """Split a markdown file into (front matter dict, body).
@@ -112,11 +115,19 @@ def fill_placeholders(body: str, site: dict, production: bool) -> str:
     )
 
 
+def whatsapp_url(site: dict) -> str:
+    """wa.me link from the number in site.json. Falls back to the contact
+    page until the number is filled in."""
+    digits = re.sub(r"\D", "", site.get("whatsapp", ""))
+    return f"https://wa.me/{digits}" if digits else "/contact/"
+
+
 def build_page(page: dict, site: dict, production: bool) -> None:
     body = fill_placeholders(page["body"], site, production)
     content_html = markdown.markdown(body, extensions=["tables", "toc"])
 
-    template = (TEMPLATES / "page.html").read_text(encoding="utf-8")
+    template_name = TEMPLATE_BY_URL.get(page["url"], "page.html")
+    template = (TEMPLATES / template_name).read_text(encoding="utf-8")
     out = render_includes(template)
     out = render_vars(
         out,
@@ -127,6 +138,7 @@ def build_page(page: dict, site: dict, production: bool) -> None:
             "robots": page["meta"].get("robots", "index, follow"),
             "h1": html.escape(page["h1"]),
             "legal_name": site["legal_name"],
+            "whatsapp_url": whatsapp_url(site),
             "content": content_html,
         },
     )
@@ -213,6 +225,11 @@ def main() -> None:
     copy_static()
     for p in pages:
         build_page(p, site, production)
+
+    if production:
+        for html_file in DIST.rglob("*.html"):
+            if "[CONFIRM" in html_file.read_text(encoding="utf-8"):
+                sys.exit(f"Production build stopped: [CONFIRM] found in {html_file}")
 
     print(f"Build complete: {DIST} ({len(pages)} pages)")
 

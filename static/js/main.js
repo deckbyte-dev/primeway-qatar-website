@@ -77,7 +77,7 @@
   }
 
   /* Reveal on enter: text blocks, headlines and image wipes */
-  var targets = $$(".rv, .split, .img-wrap");
+  var targets = $$(".rv, .split, .lines, .band-rule, .img-wrap");
   if ("IntersectionObserver" in window && !reduce) {
     var io = new IntersectionObserver(function (es) {
       es.forEach(function (e) {
@@ -105,6 +105,33 @@
 
   /* Service cards: each card shrinks and dims as the next one slides over it */
   var cards = $$(".stack .card");
+
+  /* CTA panel: teal light follows the pointer, the round button pulls toward it */
+  var panel = doc.querySelector(".band");
+  if (panel && hoverOkM && !reduce) {
+    var pr = 0;
+    panel.addEventListener("pointermove", function (e) {
+      if (pr) return;
+      pr = requestAnimationFrame(function () {
+        pr = 0;
+        var r = panel.getBoundingClientRect();
+        panel.style.setProperty("--mx", (e.clientX - r.left) + "px");
+        panel.style.setProperty("--my", (e.clientY - r.top) + "px");
+      });
+    });
+    $$("[data-magnet]").forEach(function (el) {
+      var core = el;
+      el.addEventListener("pointermove", function (e) {
+        var r = el.getBoundingClientRect();
+        core.style.setProperty("--tx", ((e.clientX - r.left - r.width / 2) * 0.18).toFixed(1) + "px");
+        core.style.setProperty("--ty", ((e.clientY - r.top - r.height / 2) * 0.18).toFixed(1) + "px");
+      });
+      el.addEventListener("pointerleave", function () {
+        core.style.setProperty("--tx", "0px");
+        core.style.setProperty("--ty", "0px");
+      });
+    });
+  }
 
   /* Count up */
   var count = doc.querySelector(".count");
@@ -155,7 +182,7 @@
             k = clamp(1 - gap / c.offsetHeight, 0, 1);
           }
           inner.style.setProperty("--sc", (1 - k * 0.05).toFixed(4));
-          inner.style.setProperty("--dim", (k * 0.45).toFixed(3));
+          inner.style.setProperty("--dim", (k * 0.16).toFixed(3));
         });
       }
       if (steps) {

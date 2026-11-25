@@ -1,6 +1,0 @@
-dist/
-.venv/
-__pycache__/
-*.pyc
-.obsidian/
-.DS_Store

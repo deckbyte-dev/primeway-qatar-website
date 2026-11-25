@@ -361,3 +361,126 @@ a:focus-visible,
     padding: 56px 0;
   }
 }
+
+/* Home: remaining sections */
+.btn-primary {
+  display: inline-block;
+  background: var(--ocean);
+  color: var(--white);
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 16px;
+  text-decoration: none;
+  padding: 14px 24px;
+  border-radius: 8px;
+  min-height: 44px;
+}
+.btn-primary:hover {
+  background: var(--navy);
+}
+.btn-primary:focus-visible {
+  outline: 3px solid var(--teal);
+  outline-offset: 3px;
+}
+.cta-strip {
+  background: var(--white);
+  border-top: 1px solid #d5e6e4;
+  border-bottom: 1px solid #d5e6e4;
+  padding: 40px 0;
+}
+.cta-strip-inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  flex-wrap: wrap;
+}
+.cta-strip h2 {
+  margin: 0 0 6px;
+  font-size: 28px;
+}
+.cta-strip p {
+  margin: 0;
+}
+.band-dark {
+  background: var(--navy);
+  color: var(--white);
+}
+.band-dark h2 {
+  color: var(--white);
+}
+.band-dark .btn-light:focus-visible,
+.band-dark .btn-outline-light:focus-visible {
+  outline: 3px solid var(--teal);
+  outline-offset: 3px;
+}
+.facts {
+  list-style: none;
+  margin: 32px 0 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 20px;
+}
+.facts li {
+  border-top: 4px solid var(--teal);
+  padding-top: 16px;
+}
+.facts strong {
+  display: block;
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: 40px;
+  line-height: 1.1;
+  color: var(--ocean);
+  margin-bottom: 6px;
+}
+.facts span {
+  display: block;
+}
+.faq {
+  margin-top: 24px;
+  display: grid;
+  gap: 12px;
+}
+.faq-item {
+  background: var(--white);
+  border-radius: 10px;
+  padding: 0 20px;
+  border: 1px solid #d5e6e4;
+}
+.faq-item summary {
+  cursor: pointer;
+  list-style: none;
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 18px;
+  padding: 18px 32px 18px 0;
+  position: relative;
+  min-height: 44px;
+}
+.faq-item summary::-webkit-details-marker {
+  display: none;
+}
+.faq-item summary::after {
+  content: "+";
+  position: absolute;
+  right: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 26px;
+  color: var(--ocean);
+}
+.faq-item[open] summary::after {
+  content: "\2212";
+}
+.faq-item summary:focus-visible {
+  outline: 3px solid var(--teal);
+  outline-offset: 2px;
+}
+.faq-item p {
+  margin: 0 0 18px;
+}
+.cta-final p {
+  max-width: 640px;
+}

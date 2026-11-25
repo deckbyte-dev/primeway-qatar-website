@@ -1,0 +1,19 @@
+<form class="form" method="post" action="{{ form_endpoint }}" data-endpoint="{{ form_endpoint }}" novalidate>
+  <div class="f-grid">
+    <label class="f"><span>Full name</span><input type="text" name="name" autocomplete="name" required></label>
+    <label class="f"><span>Phone or WhatsApp number</span><input type="tel" name="phone" autocomplete="tel" inputmode="tel" required></label>
+    <label class="f"><span>Email <i>(optional)</i></span><input type="email" name="email" autocomplete="email"></label>
+    <label class="f"><span>What do you need?</span>
+      <select name="service">
+        <option>Company formation</option><option>PRO services</option><option>Visa services</option><option>Document attestation</option><option>Translation</option><option>Trademark</option><option>Bank account</option><option>Company closure</option><option>Something else</option>
+      </select>
+    </label>
+{{ form_extra }}
+    <label class="f f-wide"><span>Message <i>(optional)</i></span><textarea name="message" rows="3"></textarea></label>
+  </div>
+  <input class="hp" type="text" name="website_url" tabindex="-1" autocomplete="off" aria-hidden="true">
+  <input type="hidden" name="page_url" value="">
+  <label class="f-check"><input type="checkbox" name="consent" required><span>I agree that Primeway may contact me about this enquiry.</span></label>
+  <p class="f-error" role="alert" hidden></p>
+  <button class="btn" type="submit">Send enquiry</button>
+</form>

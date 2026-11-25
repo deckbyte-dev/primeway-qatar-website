@@ -77,7 +77,13 @@ def render_includes(text: str) -> str:
     def replace(match: re.Match) -> str:
         return (TEMPLATES / match.group(1)).read_text(encoding="utf-8")
 
-    return INCLUDE_PATTERN.sub(replace, text)
+    # Run until nothing is left, so a partial can include another partial.
+    for _ in range(5):
+        new = INCLUDE_PATTERN.sub(replace, text)
+        if new == text:
+            break
+        text = new
+    return text
 
 
 def render_vars(text: str, context: dict) -> str:
@@ -126,12 +132,24 @@ def build_page(page: dict, site: dict, production: bool) -> None:
     body = fill_placeholders(page["body"], site, production)
     content_html = markdown.markdown(body, extensions=["tables", "toc"])
 
+    # Enquiry form (CTA-A): ends every page unless the page says cta: none.
+    wants_cta = not page["meta"].get("cta", "").startswith("none")
+    cta_block = render_includes("{{ include:_enquiry-cta.html }}") if wants_cta else ""
+    if "[CONTACT_FORM]" in content_html:
+        long_form = render_includes("{{ include:_enquiry-form.html }}").replace(
+            "{{ form_extra }}", (TEMPLATES / "_form-extra-contact.html").read_text(encoding="utf-8")
+        ).replace("{{ form_endpoint }}", site.get("form_endpoint", ""))
+        content_html = content_html.replace("<p>[CONTACT_FORM]</p>", f'<div class="form-page">{long_form}</div>')
+
     template_name = TEMPLATE_BY_URL.get(page["url"], "page.html")
     template = (TEMPLATES / template_name).read_text(encoding="utf-8")
     out = render_includes(template)
+    out = out.replace("{{ cta_block }}", cta_block)
+    out = out.replace("{{ form_extra }}", "")
     out = render_vars(
         out,
         {
+            "form_endpoint": site.get("form_endpoint", ""),
             "title": html.escape(page["title"]),
             "description": html.escape(page["description"]),
             "canonical": site["domain"] + page["url"],

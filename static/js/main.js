@@ -2,6 +2,7 @@
 (function () {
   var doc = document;
   var reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  var hoverOkM = window.matchMedia("(hover: hover) and (min-width: 961px)").matches;
   var clamp = function (v, a, b) { return Math.min(b, Math.max(a, v)); };
   var $$ = function (s) { return Array.prototype.slice.call(doc.querySelectorAll(s)); };
 
@@ -38,6 +39,22 @@
     });
   }
 
+  /* Services menu: click toggles, hover opens on desktop, Escape closes */
+  var hm = doc.querySelector(".has-menu");
+  if (hm) {
+    var mb = hm.querySelector(".menu-btn");
+    var setOpen = function (o) { hm.classList.toggle("open", o); mb.setAttribute("aria-expanded", o ? "true" : "false"); };
+    mb.addEventListener("click", function () { setOpen(!hm.classList.contains("open")); });
+    if (hoverOkM) {
+      var t;
+      hm.addEventListener("pointerenter", function () { clearTimeout(t); setOpen(true); });
+      hm.addEventListener("pointerleave", function () { t = setTimeout(function () { setOpen(false); }, 160); });
+    }
+    doc.addEventListener("click", function (e) { if (!hm.contains(e.target)) setOpen(false); });
+    doc.addEventListener("keydown", function (e) { if (e.key === "Escape") { setOpen(false); } });
+    hm.addEventListener("click", function (e) { if (e.target.closest(".mega a")) { setOpen(false); if (typeof closeMenu === "function") closeMenu(); } });
+  }
+
   /* Hero headline: words rise out of a mask */
   var h1 = doc.querySelector(".hero h1");
   if (h1 && !reduce) {
@@ -48,8 +65,19 @@
     }).join(" ");
   }
 
-  /* Reveal on enter: text blocks and image wipes */
-  var targets = $$(".rv, .img-wrap");
+  /* Section headlines: same word mask, triggered when they scroll into view */
+  if (!reduce) {
+    $$(".split").forEach(function (el) {
+      var txt = el.textContent.trim();
+      el.setAttribute("aria-label", txt);
+      el.innerHTML = txt.split(/\s+/).map(function (w, i) {
+        return '<span class="wm" aria-hidden="true"><span class="w" style="--i:' + i + '">' + w + "</span></span>";
+      }).join(" ");
+    });
+  }
+
+  /* Reveal on enter: text blocks, headlines and image wipes */
+  var targets = $$(".rv, .split, .img-wrap");
   if ("IntersectionObserver" in window && !reduce) {
     var io = new IntersectionObserver(function (es) {
       es.forEach(function (e) {
@@ -74,6 +102,9 @@
   /* Route progress */
   var steps = doc.querySelector(".steps");
   var stepItems = steps ? $$(".steps li") : [];
+
+  /* Service cards: each card shrinks and dims as the next one slides over it */
+  var cards = $$(".stack .card");
 
   /* Count up */
   var count = doc.querySelector(".count");
@@ -113,6 +144,19 @@
         var prog = clamp((vh * 0.85 - r.top) / (r.height + vh * 0.35), 0, 1);
         var n = Math.round(prog * words.length);
         words.forEach(function (w, i) { w.classList.toggle("on", i < n); });
+      }
+      if (cards.length && window.innerWidth > 960) {
+        cards.forEach(function (c, i) {
+          var inner = c.firstElementChild;
+          var next = cards[i + 1];
+          var k = 0;
+          if (next) {
+            var gap = next.getBoundingClientRect().top - c.getBoundingClientRect().top;
+            k = clamp(1 - gap / c.offsetHeight, 0, 1);
+          }
+          inner.style.setProperty("--sc", (1 - k * 0.05).toFixed(4));
+          inner.style.setProperty("--dim", (k * 0.45).toFixed(3));
+        });
       }
       if (steps) {
         var s = steps.getBoundingClientRect();

@@ -38,9 +38,9 @@ Hours: [CONFIRM: working days and hours]
 
 ## Send us a message
 
-Use the long contact form from 03-GLOBAL-CONTENT.txt.
+[CONTACT_FORM]
 
-Helper text under the form: Tell us what you want to do in a line or two. For example "I want to open a trading company with a foreign partner" or "My licence expires next month".
+Tell us what you want to do in a line or two. For example "I want to open a trading company with a foreign partner" or "My licence expires next month".
 
 ## What happens after you write
 

@@ -8,118 +8,110 @@
 <main>
 
   <!-- HERO -->
-  <section class="hero dark">
-    <div class="orbs" aria-hidden="true"><i class="o1"></i><i class="o2"></i><i class="o3"></i></div>
-    <div class="wrap hero-inner">
+  <section class="hero">
+    <div class="wrap">
       <h1>{{ h1 }}</h1>
       <div class="hero-row">
         <p class="hero-sub">Starting a company in Qatar means ministries, forms, stamps and waiting. We do that part. You get your licence, your cards and a clear idea of what comes next.</p>
         <!-- TODO: small line under buttons, "Reply within one working day", once the client confirms the reply time -->
         <div class="hero-buttons">
-          <a class="btn-light" data-magnetic href="/contact/">Free consultation</a>
-          <a class="btn-outline-light" data-magnetic href="{{ whatsapp_url }}">Chat on WhatsApp</a>
+          <a class="btn" href="/contact/">Free consultation</a>
+          <a class="btn btn-line" href="{{ whatsapp_url }}">Chat on WhatsApp</a>
         </div>
       </div>
     </div>
-    <div class="marquee" aria-hidden="true">
-      <div class="marquee-track">
-        <span>Company formation</span><span>PRO services</span><span>Visa services</span><span>Attestation</span><span>Translation</span><span>Trademark registration</span><span>Bank account</span><span>Company share sale</span>
-        <span>Company formation</span><span>PRO services</span><span>Visa services</span><span>Attestation</span><span>Translation</span><span>Trademark registration</span><span>Bank account</span><span>Company share sale</span>
+    <div class="hero-photo">
+      <div class="img-wrap" data-parallax>
+        <img src="/static/img/doha/panorama-calm-1920.webp" srcset="/static/img/doha/panorama-calm-960.webp 960w, /static/img/doha/panorama-calm-1920.webp 1920w" sizes="100vw" alt="The Doha skyline across the bay" fetchpriority="high" decoding="async">
       </div>
     </div>
   </section>
 
   <!-- WHO WE ARE -->
-  <section class="chapter dark statement">
-    <div class="wrap">
-      <h2 class="small-h">Who is behind Primeway</h2>
-      <p class="fill">We started because small business owners kept losing weeks to simple mistakes: a wrong activity code, a document that was not attested, a renewal that was missed by two days. Our job is to prevent those.</p>
-      <div class="statement-foot">
-        <p>Primeway for Trading and Services is a Qatar based company that does government paperwork for other companies.</p>
+  <section class="sec">
+    <div class="wrap intro-grid">
+      <h2 class="rv">Who is behind Primeway</h2>
+      <div class="intro-text">
+        <p class="fill">We started because small business owners kept losing weeks to simple mistakes: a wrong activity code, a document that was not attested, a renewal that was missed by two days. Our job is to prevent those.</p>
+        <p class="rv">Primeway for Trading and Services is a Qatar based company that does government paperwork for other companies.</p>
         <!-- TODO: owner name, years in PRO work and one line of background, once the client confirms -->
-        <a class="text-link" href="/about/">More about us</a>
+        <a class="btn btn-line rv" href="/about/">More about us</a>
       </div>
     </div>
   </section>
 
   <!-- WHAT WE HELP WITH -->
-  <section class="chapter dark services">
+  <section class="services" style="padding-bottom:0">
     <div class="wrap">
-      <div class="chapter-head">
-        <h2>What we help with</h2>
-        <p>Most people come to us for one of these four things.</p>
+      <div class="head2">
+        <h2 class="rv">What we help with</h2>
+        <p class="rv">Most people come to us for one of these four things.</p>
       </div>
-      <div class="stack">
-      <article class="svc" style="--i:0;--glow:#04a595" data-glow>
-        <div class="svc-body">
-          <h3><a class="svc-link" href="/company-formation-qatar/">Company formation</a></h3>
-          <div class="svc-text">
-            <p>Pick the right type of company, prepare the documents and get the commercial registration and licence. LLC, free zone, QFC, representative office and e-commerce licence. Also company share sale and transfer, and corporate bank account opening.</p>
-          </div>
+      <article class="svc">
+        <div class="img-wrap" data-parallax><img src="/static/img/doha/skyline-day-1920.webp" srcset="/static/img/doha/skyline-day-960.webp 960w, /static/img/doha/skyline-day-1920.webp 1920w" sizes="(max-width:960px) 100vw, 70vw" alt="" loading="lazy" decoding="async"></div>
+        <div class="svc-card rv">
+          <h3><a href="/company-formation-qatar/">Company formation</a></h3>
+          <p>Pick the right type of company, prepare the documents and get the commercial registration and licence. LLC, free zone, QFC, representative office and e-commerce licence. Also company share sale and transfer, and corporate bank account opening.</p>
+          <a class="text-link" href="/company-formation-qatar/">Learn more</a>
         </div>
-        <span class="svc-arrow" aria-hidden="true"></span>
       </article>
-      <article class="svc" style="--i:1;--glow:#3f9bd0" data-glow>
-        <div class="svc-body">
-          <h3><a class="svc-link" href="/pro-services-qatar/">PRO services</a></h3>
-          <div class="svc-text">
-            <p>Labour, Interior, Single Window, tax, Chamber, renewals and company cancellation, in monthly or yearly packages, for companies that do not want a full time person standing in queues.</p>
-          </div>
+      <article class="svc">
+        <div class="img-wrap" data-parallax><img src="/static/img/doha/west-bay-towers-1920.webp" srcset="/static/img/doha/west-bay-towers-960.webp 960w, /static/img/doha/west-bay-towers-1920.webp 1920w" sizes="(max-width:960px) 100vw, 70vw" alt="" loading="lazy" decoding="async"></div>
+        <div class="svc-card rv">
+          <h3><a href="/pro-services-qatar/">PRO services</a></h3>
+          <p>Labour, Interior, Single Window, tax, Chamber, renewals and company cancellation, in monthly or yearly packages, for companies that do not want a full time person standing in queues.</p>
+          <a class="text-link" href="/pro-services-qatar/">Learn more</a>
         </div>
-        <span class="svc-arrow" aria-hidden="true"></span>
       </article>
-      <article class="svc" style="--i:2;--glow:#1fd1bd" data-glow>
-        <div class="svc-body">
-          <h3><a class="svc-link" href="/visa-services-qatar/">Visas and cards</a></h3>
-          <div class="svc-text">
-            <p>Work visas, residence permits, Qatar ID and the paperwork behind each of them.</p>
-          </div>
+      <article class="svc">
+        <div class="img-wrap" data-parallax><img src="/static/img/doha/towers-close-1920.webp" srcset="/static/img/doha/towers-close-960.webp 960w, /static/img/doha/towers-close-1920.webp 1920w" sizes="(max-width:960px) 100vw, 70vw" alt="" loading="lazy" decoding="async"></div>
+        <div class="svc-card rv">
+          <h3><a href="/visa-services-qatar/">Visas and cards</a></h3>
+          <p>Work visas, residence permits, Qatar ID and the paperwork behind each of them.</p>
+          <a class="text-link" href="/visa-services-qatar/">Learn more</a>
         </div>
-        <span class="svc-arrow" aria-hidden="true"></span>
       </article>
-      <article class="svc" style="--i:3;--glow:#055882" data-glow>
-        <div class="svc-body">
-          <h3><a class="svc-link" href="/document-attestation-qatar/">Documents and trademarks</a></h3>
-          <div class="svc-text">
-            <p>Attestation, legal translation and trademark registration, handled with the right office in the right order.</p>
+      <article class="svc">
+        <div class="img-wrap" data-parallax><img src="/static/img/doha/museum-skyline-1920.webp" srcset="/static/img/doha/museum-skyline-960.webp 960w, /static/img/doha/museum-skyline-1920.webp 1920w" sizes="(max-width:960px) 100vw, 70vw" alt="" loading="lazy" decoding="async"></div>
+        <div class="svc-card rv">
+          <h3><a href="/document-attestation-qatar/">Documents and trademarks</a></h3>
+          <p>Attestation, legal translation and trademark registration, handled with the right office in the right order.</p>
             <p class="svc-more"><a class="text-link" href="/document-attestation-qatar/">Document attestation and translation</a><a class="text-link" href="/trademark-registration-qatar/">Trademark registration</a></p>
-          </div>
+          <a class="text-link" href="/document-attestation-qatar/">Learn more</a>
         </div>
-        <span class="svc-arrow" aria-hidden="true"></span>
       </article>
-      </div>
     </div>
   </section>
 
   <!-- CTA-C -->
-  <section class="bigcta dark">
-    <div class="wrap">
-      <a class="bigcta-link" data-magnetic href="/contact/">
-        <span class="bigcta-title">Start with a free consultation</span>
-        <span class="bigcta-text">Ten minutes on the phone is usually enough to know what you need.</span>
-        <span class="bigcta-btn">Book a call</span>
-      </a>
+  <section class="band">
+    <div class="wrap band-in">
+      <div class="rv">
+        <h2>Start with a free consultation</h2>
+        <p>Ten minutes on the phone is usually enough to know what you need.</p>
+      </div>
+      <a class="btn rv" href="/contact/">Book a call</a>
     </div>
   </section>
 
   <!-- EXPECT -->
-  <section class="chapter light expect">
-    <div class="wrap expect-grid">
-      <h2>What you can expect from us</h2>
+  <section class="sec expect">
+    <div class="wrap">
+      <h2 class="rv">What you can expect from us</h2>
       <ul class="expect-list">
-        <li>One person on your file from the first call to the last card. You do not get passed around.</li>
-        <li>The cost in writing before we start. Government fees are listed separately from our fee.</li>
-        <li>A list of documents on day one, so you only collect things once.</li>
-        <li>A reminder before every renewal. Licences, cards and tax filings all have dates.</li>
-        <li>Straight answers. If a route will not work for your business, we say so.</li>
+        <li class="rv" style="--d:0">One person on your file from the first call to the last card. You do not get passed around.</li>
+        <li class="rv" style="--d:1">The cost in writing before we start. Government fees are listed separately from our fee.</li>
+        <li class="rv" style="--d:2">A list of documents on day one, so you only collect things once.</li>
+        <li class="rv" style="--d:3">A reminder before every renewal. Licences, cards and tax filings all have dates.</li>
+        <li class="rv" style="--d:4">Straight answers. If a route will not work for your business, we say so.</li>
       </ul>
     </div>
   </section>
 
   <!-- HOW IT WORKS -->
-  <section class="chapter dark route">
-    <div class="wrap route-grid">
-      <h2>How it works</h2>
+  <section class="sec route">
+    <div class="wrap">
+      <h2 class="rv">How it works</h2>
       <ol class="steps">
         <li><span class="step-num">1</span><p>You tell us what you want to do. A call or a WhatsApp message is enough.</p></li>
         <li><span class="step-num">2</span><p>We tell you the route, the documents and the cost in writing.</p></li>
@@ -130,78 +122,73 @@
   </section>
 
   <!-- COMPANY TYPES -->
-  <section class="chapter mist types">
-    <div class="wrap">
-      <div class="chapter-head chapter-head-light">
-        <h2>Which type of company fits you?</h2>
-        <p>This is the first question and it decides everything after it. Here is the short version.</p>
+  <section class="sec types">
+    <div class="wrap types-grid">
+      <div class="types-photo">
+        <div class="img-wrap" data-parallax><img src="/static/img/doha/lusail-towers-1920.webp" srcset="/static/img/doha/lusail-towers-960.webp 960w, /static/img/doha/lusail-towers-1920.webp 1920w" sizes="(max-width:960px) 100vw, 70vw" alt="" loading="lazy" decoding="async"></div>
       </div>
-      <div class="fold" data-fold>
-        <article class="fold-item is-open">
-          <h3><button type="button" class="fold-btn" aria-expanded="true">LLC on the mainland</button></h3>
-          <div class="fold-body"><div>
-            <p>The usual choice if you want to sell to customers anywhere in Qatar.</p>
-            <a class="text-link" href="/company-formation-qatar/llc/">LLC in Qatar</a>
-          </div></div>
-        </article>
-        <article class="fold-item">
-          <h3><button type="button" class="fold-btn" aria-expanded="false">Free zone company</button></h3>
-          <div class="fold-body"><div>
-            <p>Good for export, storage and some service businesses, with limits on selling inside Qatar.</p>
-            <a class="text-link" href="/company-formation-qatar/#free-zone-company-in-qatar">Free zone section</a>
-          </div></div>
-        </article>
-        <article class="fold-item">
-          <h3><button type="button" class="fold-btn" aria-expanded="false">Qatar Financial Centre (QFC)</button></h3>
-          <div class="fold-body"><div>
-            <p>For financial, professional and some corporate services.</p>
-            <a class="text-link" href="/company-formation-qatar/#qatar-financial-centre-qfc-company-setup">QFC section</a>
-          </div></div>
-        </article>
-        <article class="fold-item">
-          <h3><button type="button" class="fold-btn" aria-expanded="false">Representative office</button></h3>
-          <div class="fold-body"><div>
-            <p>For a foreign company that wants to explore the market, not sell.</p>
-            <a class="text-link" href="/company-formation-qatar/#representative-office-in-qatar">Representative office section</a>
-          </div></div>
-        </article>
+      <div>
+        <h2 class="rv">Which type of company fits you?</h2>
+        <p class="rv" style="color:var(--muted);margin-top:14px">This is the first question and it decides everything after it. Here is the short version.</p>
+        <div class="types-list">
+        <details name="types" open>
+          <summary>LLC on the mainland</summary>
+          <div><p>The usual choice if you want to sell to customers anywhere in Qatar.</p>
+            <a class="text-link" href="/company-formation-qatar/llc/">LLC in Qatar</a></div>
+        </details>
+        <details name="types">
+          <summary>Free zone company</summary>
+          <div><p>Good for export, storage and some service businesses, with limits on selling inside Qatar.</p>
+            <a class="text-link" href="/company-formation-qatar/#free-zone-company-in-qatar">Free zone section</a></div>
+        </details>
+        <details name="types">
+          <summary>Qatar Financial Centre (QFC)</summary>
+          <div><p>For financial, professional and some corporate services.</p>
+            <a class="text-link" href="/company-formation-qatar/#qatar-financial-centre-qfc-company-setup">QFC section</a></div>
+        </details>
+        <details name="types">
+          <summary>Representative office</summary>
+          <div><p>For a foreign company that wants to explore the market, not sell.</p>
+            <a class="text-link" href="/company-formation-qatar/#representative-office-in-qatar">Representative office section</a></div>
+        </details>
+        </div>
+        <p class="chapter-note">Not sure? Send us two lines about your business and we will tell you which one fits. <a href="/contact/">Contact us</a></p>
       </div>
-      <p class="chapter-note">Not sure? Send us two lines about your business and we will tell you which one fits. <a href="/contact/">Contact us</a></p>
     </div>
   </section>
 
   <!-- FOREIGN OWNERS -->
-  <section class="chapter dark foreign">
-    <div class="orbs orbs-foreign" aria-hidden="true"><i class="o1"></i><i class="o2"></i></div>
+  <section class="sec foreign">
+    <div class="bg" aria-hidden="true"><img src="/static/img/doha/night-moon-1920.webp" srcset="/static/img/doha/night-moon-960.webp 960w, /static/img/doha/night-moon-1920.webp 1920w" sizes="100vw" alt="" loading="lazy" decoding="async" data-parallax-img></div>
     <div class="wrap foreign-inner">
       <p class="big-100" aria-hidden="true"><span class="count" data-to="100">100</span>%</p>
-      <div class="foreign-text">
-        <h2>Can a foreigner own 100 percent of a company in Qatar?</h2>
-        <p>In most sectors, yes. Since Law No. 1 of 2019, foreign investors can hold full ownership of a company with approval from the Ministry of Commerce and Industry. A few sectors, such as banking and insurance, have their own rules. We explain how it works and what the ministry looks at.</p>
-        <p><a class="btn-light" data-magnetic href="/company-formation-qatar/100-percent-foreign-ownership/">100 percent foreign ownership in Qatar</a></p>
+      <div>
+        <h2 class="rv">Can a foreigner own 100 percent of a company in Qatar?</h2>
+        <p class="rv">In most sectors, yes. Since Law No. 1 of 2019, foreign investors can hold full ownership of a company with approval from the Ministry of Commerce and Industry. A few sectors, such as banking and insurance, have their own rules. We explain how it works and what the ministry looks at.</p>
+        <p class="rv"><a class="btn btn-light" href="/company-formation-qatar/100-percent-foreign-ownership/">100 percent foreign ownership in Qatar</a></p>
       </div>
     </div>
   </section>
 
   <!-- WHY QATAR -->
-  <section class="chapter light why">
-    <div class="wrap">
-      <h2>Why start a company in Qatar</h2>
+  <section class="sec why">
+    <div class="wrap why-grid">
+      <h2 class="rv">Why start a company in Qatar</h2>
       <!-- TODO: client to approve these four lines before launch -->
       <ul class="why-list">
-        <li>No personal income tax on salaries.</li>
-        <li>A flat 10 percent corporate tax on taxable profit under the general regime.</li>
-        <li>Most services for starting a company are online through Single Window.</li>
-        <li>A steady flow of projects, from construction to retail to services.</li>
+        <li class="rv">No personal income tax on salaries.</li>
+        <li class="rv">A flat 10 percent corporate tax on taxable profit under the general regime.</li>
+        <li class="rv">Most services for starting a company are online through Single Window.</li>
+        <li class="rv">A steady flow of projects, from construction to retail to services.</li>
       </ul>
     </div>
   </section>
 
   <!-- FAQ -->
-  <section class="chapter mist faq-section" id="faq">
+  <section class="sec faq-section" id="faq">
     <div class="wrap faq-grid">
       <div>
-        <h2>Questions we hear often</h2>
+        <h2 class="rv">Questions we hear often</h2>
         <!-- TODO: client to confirm the setup time range and what the fee includes -->
         <p>Something else on your mind? <a href="{{ whatsapp_url }}">Ask us on WhatsApp</a>.</p>
       </div>
@@ -231,15 +218,14 @@
   </section>
 
   <!-- CTA-A -->
-  <section class="final dark">
-    <div class="orbs orbs-final" aria-hidden="true"><i class="o1"></i><i class="o2"></i></div>
-    <img class="final-mark" src="/static/img/logo/svg/primeway-icon-white.svg" alt="" width="248" height="250" aria-hidden="true" />
+  <section class="final">
+    <div class="bg" aria-hidden="true"><img src="/static/img/doha/night-colour-1920.webp" srcset="/static/img/doha/night-colour-960.webp 960w, /static/img/doha/night-colour-1920.webp 1920w" sizes="100vw" alt="" loading="lazy" decoding="async" data-parallax-img></div>
     <div class="wrap final-inner">
-      <h2>Tell us what you need</h2>
-      <p>Send a short message. We will reply with the steps, the documents and the cost for your case. No charge for the first call.</p>
-      <div class="hero-buttons">
-        <a class="btn-light" data-magnetic href="/contact/">Request a call back</a>
-        <a class="btn-outline-light" data-magnetic href="{{ whatsapp_url }}">Chat on WhatsApp</a>
+      <h2 class="rv">Tell us what you need</h2>
+      <p class="rv">Send a short message. We will reply with the steps, the documents and the cost for your case. No charge for the first call.</p>
+      <div class="hero-buttons rv">
+        <a class="btn btn-light" href="/contact/">Request a call back</a>
+        <a class="btn btn-line-light" href="{{ whatsapp_url }}">Chat on WhatsApp</a>
       </div>
     </div>
   </section>

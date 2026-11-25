@@ -2,22 +2,23 @@
 (function () {
   var doc = document;
   var reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-  var hoverOk = window.matchMedia("(hover: hover) and (pointer: fine)").matches;
   var clamp = function (v, a, b) { return Math.min(b, Math.max(a, v)); };
+  var $$ = function (s) { return Array.prototype.slice.call(doc.querySelectorAll(s)); };
 
-  /* ---------- Header: glass after scroll, hides on the way down ---------- */
+  /* Header: glass after scroll, hides while scrolling down */
   var header = doc.querySelector(".site-header");
   var lastY = window.scrollY;
   function headerState() {
     var y = window.scrollY;
     header.classList.toggle("is-scrolled", y > 24);
-    var menuOpen = header.classList.contains("nav-open");
-    if (!menuOpen && y > 240 && y > lastY + 6) header.classList.add("is-hidden");
-    else if (y < lastY - 6 || y <= 240) header.classList.remove("is-hidden");
+    if (!header.classList.contains("nav-open")) {
+      if (y > 240 && y > lastY + 6) header.classList.add("is-hidden");
+      else if (y < lastY - 6 || y <= 240) header.classList.remove("is-hidden");
+    }
     lastY = y;
   }
 
-  /* ---------- Mobile menu ---------- */
+  /* Mobile menu */
   var toggle = doc.querySelector(".nav-toggle");
   var nav = doc.getElementById("site-nav");
   function closeMenu() {
@@ -37,7 +38,7 @@
     });
   }
 
-  /* ---------- Hero headline: words rise out of a mask ---------- */
+  /* Hero headline: words rise out of a mask */
   var h1 = doc.querySelector(".hero h1");
   if (h1 && !reduce) {
     var text = h1.textContent.trim();
@@ -47,135 +48,82 @@
     }).join(" ");
   }
 
-  /* ---------- Light that follows the pointer (hero) ---------- */
-  var hero = doc.querySelector(".hero");
-  if (hero && hoverOk && !reduce) {
-    hero.addEventListener("pointermove", function (e) {
-      var r = hero.getBoundingClientRect();
-      hero.style.setProperty("--mx", ((e.clientX - r.left) / r.width - 0.5).toFixed(3));
-      hero.style.setProperty("--my", ((e.clientY - r.top) / r.height - 0.5).toFixed(3));
-    });
-  }
-
-  /* ---------- Glow that follows the pointer (service sheets) ---------- */
-  doc.querySelectorAll("[data-glow]").forEach(function (el) {
-    el.addEventListener("pointermove", function (e) {
-      var r = el.getBoundingClientRect();
-      el.style.setProperty("--mx", e.clientX - r.left + "px");
-      el.style.setProperty("--my", e.clientY - r.top + "px");
-    });
-  });
-
-  /* ---------- Magnetic buttons ---------- */
-  if (hoverOk && !reduce) {
-    doc.querySelectorAll("[data-magnetic]").forEach(function (el) {
-      el.addEventListener("pointermove", function (e) {
-        var r = el.getBoundingClientRect();
-        var x = (e.clientX - (r.left + r.width / 2)) * 0.18;
-        var y = (e.clientY - (r.top + r.height / 2)) * 0.28;
-        el.style.transform = "translate(" + x.toFixed(1) + "px," + y.toFixed(1) + "px)";
+  /* Reveal on enter: text blocks and image wipes */
+  var targets = $$(".rv, .img-wrap");
+  if ("IntersectionObserver" in window && !reduce) {
+    var io = new IntersectionObserver(function (es) {
+      es.forEach(function (e) {
+        if (e.isIntersecting) { e.target.classList.add("in"); io.unobserve(e.target); }
       });
-      el.addEventListener("pointerleave", function () { el.style.transform = ""; });
-    });
+    }, { rootMargin: "0px 0px -8% 0px", threshold: 0.08 });
+    targets.forEach(function (t) { io.observe(t); });
+  } else {
+    targets.forEach(function (t) { t.classList.add("in"); });
   }
 
-  /* ---------- Statement: words light up as you scroll ---------- */
+  /* Statement: words light up as you read */
   var fill = doc.querySelector(".fill");
-  var fillWords = [];
+  var words = [];
   if (fill && !reduce) {
     var t = fill.textContent.trim();
     fill.setAttribute("aria-label", t);
-    fill.innerHTML = t.split(/\s+/).map(function (w) {
-      return '<span class="fw" aria-hidden="true">' + w + "</span>";
-    }).join(" ");
-    fillWords = Array.prototype.slice.call(fill.querySelectorAll(".fw"));
+    fill.innerHTML = t.split(/\s+/).map(function (w) { return '<span class="fw" aria-hidden="true">' + w + "</span>"; }).join(" ");
+    words = $$(".fill .fw");
   }
 
-  /* ---------- Steps: the route fills as you scroll ---------- */
+  /* Route progress */
   var steps = doc.querySelector(".steps");
-  var stepItems = steps ? Array.prototype.slice.call(steps.querySelectorAll("li")) : [];
+  var stepItems = steps ? $$(".steps li") : [];
 
-  /* ---------- 100%: counts up once ---------- */
+  /* Count up */
   var count = doc.querySelector(".count");
-  var counted = false;
-  function runCount() {
-    if (counted || !count) return;
-    counted = true;
-    var to = parseInt(count.getAttribute("data-to"), 10) || 100;
-    var start = null;
-    function tick(ts) {
-      if (start === null) start = ts;
-      var p = clamp((ts - start) / 1800, 0, 1);
-      var eased = 1 - Math.pow(1 - p, 3);
-      count.textContent = Math.round(to * eased);
-      if (p < 1) requestAnimationFrame(tick);
-    }
-    requestAnimationFrame(tick);
-  }
-  if (count && !reduce) {
+  if (count && "IntersectionObserver" in window && !reduce) {
+    var to = +count.getAttribute("data-to") || 100;
     count.textContent = "0";
-    if ("IntersectionObserver" in window) {
-      var io = new IntersectionObserver(function (en) {
-        if (en[0].isIntersecting) { runCount(); io.disconnect(); }
-      }, { threshold: 0.4 });
-      io.observe(count);
-    } else { runCount(); }
+    var cio = new IntersectionObserver(function (es) {
+      if (!es[0].isIntersecting) return;
+      cio.disconnect();
+      var t0 = performance.now();
+      (function tick(n) {
+        var p = clamp((n - t0) / 1600, 0, 1);
+        count.textContent = Math.round(to * (1 - Math.pow(1 - p, 3)));
+        if (p < 1) requestAnimationFrame(tick);
+      })(t0);
+    }, { threshold: 0.5 });
+    cio.observe(count);
   }
 
-  /* ---------- One scroll handler for all scroll-linked bits ---------- */
+  /* Scroll-linked: parallax, words, route */
+  var par = $$("[data-parallax] img, [data-parallax-img]");
   var ticking = false;
-  function update() {
+  function frame() {
     ticking = false;
     var vh = window.innerHeight;
     headerState();
-
-    if (fillWords.length) {
-      var r = fill.getBoundingClientRect();
-      var prog = clamp((vh * 0.85 - r.top) / (r.height + vh * 0.35), 0, 1);
-      var n = fillWords.length;
-      for (var i = 0; i < n; i++) {
-        var o = 0.2 + 0.8 * clamp(prog * (n + 3) - i, 0, 1);
-        fillWords[i].style.opacity = o.toFixed(2);
+    if (!reduce) {
+      par.forEach(function (img) {
+        var box = img.parentElement.getBoundingClientRect();
+        if (box.bottom < -100 || box.top > vh + 100) return;
+        var p = (box.top + box.height / 2 - vh / 2) / vh; /* -1..1 */
+        var max = img.offsetHeight - box.height;
+        img.style.setProperty("--py", (-max / 2 + clamp(p, -1, 1) * -max / 2).toFixed(1) + "px");
+      });
+      if (words.length) {
+        var r = fill.getBoundingClientRect();
+        var prog = clamp((vh * 0.85 - r.top) / (r.height + vh * 0.35), 0, 1);
+        var n = Math.round(prog * words.length);
+        words.forEach(function (w, i) { w.classList.toggle("on", i < n); });
+      }
+      if (steps) {
+        var s = steps.getBoundingClientRect();
+        var sp = clamp((vh * 0.8 - s.top) / (s.height + vh * 0.2), 0, 1);
+        steps.style.setProperty("--p", sp.toFixed(3));
+        stepItems.forEach(function (li, i) { li.classList.toggle("on", sp > i / stepItems.length + 0.02); });
       }
     }
-    if (steps) {
-      var sr = steps.getBoundingClientRect();
-      var line = vh * 0.55;
-      steps.style.setProperty("--p", clamp((line - sr.top) / sr.height, 0, 1).toFixed(3));
-      stepItems.forEach(function (li) {
-        var lr = li.getBoundingClientRect();
-        li.classList.toggle("on", lr.top < line);
-      });
-    }
   }
-  function onScroll() {
-    if (!ticking) { ticking = true; requestAnimationFrame(update); }
-  }
-  window.addEventListener("scroll", onScroll, { passive: true });
-  window.addEventListener("resize", onScroll);
-  window.addEventListener("load", update);
-  update();
-  if (reduce) {
-    if (steps) { steps.style.setProperty("--p", 1); stepItems.forEach(function (li) { li.classList.add("on"); }); }
-  }
-
-  /* ---------- Company types: folding panels ---------- */
-  var fold = doc.querySelector("[data-fold]");
-  if (fold) {
-    var items = Array.prototype.slice.call(fold.querySelectorAll(".fold-item"));
-    var open = function (item) {
-      items.forEach(function (it) {
-        var on = it === item;
-        it.classList.toggle("is-open", on);
-        it.querySelector(".fold-btn").setAttribute("aria-expanded", on ? "true" : "false");
-      });
-    };
-    items.forEach(function (item) {
-      var btn = item.querySelector(".fold-btn");
-      btn.addEventListener("click", function () { open(item); });
-      if (hoverOk) item.addEventListener("pointerenter", function () {
-        if (window.innerWidth > 960) open(item);
-      });
-    });
-  }
+  function req() { if (!ticking) { ticking = true; requestAnimationFrame(frame); } }
+  window.addEventListener("scroll", req, { passive: true });
+  window.addEventListener("resize", req);
+  frame();
 })();

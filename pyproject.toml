@@ -1,7 +1,8 @@
 [project]
 name = "primeway-qatar-website"
 version = "0.1.0"
-requires-python = ">=3.14"
-dependencies = [
-    "markdown>=3.11.3",
-]
+requires-python = ">=3.10"
+dependencies = ["markdown>=3.10.3"]
+
+[tool.setuptools]
+py-modules = []

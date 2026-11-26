@@ -2,19 +2,30 @@
 <html lang="en">
 <head>
 {{ include:_head.html }}
+<link rel="stylesheet" href="/static/css/inner.css">
+<script src="/static/js/inner.js" defer></script>
 </head>
-<body>
+<body class="inner">
 {{ include:_header.html }}
 <main>
-  <section class="page-hero">
-    <div class="wrap page-hero-inner">
-      <h1>{{ h1 }}</h1>
+  <section class="ph">
+    <div class="wrap">
+      {{ crumbs }}
+      <h1 class="ph-h">{{ h1 }}</h1>
+      <div class="ph-row">
+        <div class="ph-lead">{{ lead }}</div>
+        {{ hero_buttons }}
+      </div>
     </div>
+    {{ hero_picture }}
   </section>
-  <div class="page-body">
-    <article class="wrap page">
-      {{ content }}
-    </article>
+  <div class="pbody {{ page_class }}">
+    <div class="wrap pbody-grid">
+      {{ toc }}
+      <article class="page">
+        {{ content }}
+      </article>
+    </div>
   </div>
   {{ cta_block }}
 </main>

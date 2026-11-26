@@ -128,6 +128,100 @@ def whatsapp_url(site: dict) -> str:
     return f"https://wa.me/{digits}" if digits else "/contact/"
 
 
+
+# ---- Inner page layout -------------------------------------------------
+# Default hero photo per page (a page can override with hero_image: in its
+# front matter). Files live in static/img/doha/ as NAME-960.webp / NAME-1920.webp.
+PAGE_HERO = {
+    "/company-formation-qatar/": "west-bay-towers",
+    "/company-formation-qatar/llc/": "skyline-dusk",
+    "/company-formation-qatar/100-percent-foreign-ownership/": "night-moon",
+    "/pro-services-qatar/": "skyline-day",
+    "/visa-services-qatar/": "towers-close",
+    "/document-attestation-qatar/": "museum-skyline",
+    "/trademark-registration-qatar/": "lusail-towers",
+    "/about/": "panorama-calm",
+    "/contact/": "panorama-night",
+}
+CRUMB_URLS: dict[str, str] = {}
+
+H2_RE = re.compile(r'<h2 id="([^"]+)">(.*?)</h2>', re.S)
+FAQ_Q_RE = re.compile(r"<p><strong>Q:\s*(.*?)</strong></p>", re.S)
+
+
+def build_crumbs(breadcrumb: str) -> str:
+    if not breadcrumb or breadcrumb.startswith("none"):
+        return ""
+    parts = [p.strip() for p in breadcrumb.split(">")]
+    out = []
+    for i, label in enumerate(parts):
+        last = i == len(parts) - 1
+        url = "/" if i == 0 else CRUMB_URLS.get(label)
+        if last or not url:
+            out.append(f'<span aria-current="page">{html.escape(label)}</span>' if last else f"<span>{html.escape(label)}</span>")
+        else:
+            out.append(f'<a href="{url}">{html.escape(label)}</a>')
+    return '<nav class="crumbs" aria-label="Breadcrumb">' + "<i>/</i>".join(out) + "</nav>"
+
+
+def faq_to_details(body: str) -> str:
+    """'**Q: ...**' followed by answer paragraphs becomes an accordion."""
+    pieces = FAQ_Q_RE.split(body)
+    if len(pieces) < 3:
+        return body
+    out = [pieces[0]]
+    for q, answer in zip(pieces[1::2], pieces[2::2]):
+        out.append(f'<details class="qa"><summary>{q}</summary><div>{answer.strip()}</div></details>')
+    return '<div class="qa-list">' + "".join(out) + "</div>"
+
+
+def structure_content(content_html: str) -> tuple[str, str, str]:
+    """Split page HTML into (lead paragraph, table of contents, sectioned body)."""
+    lead = ""
+    m = re.match(r"\s*(<p>.*?</p>)\s*", content_html, re.S)
+    if m and "<h2" in content_html[m.end():]:
+        lead = m.group(1)
+        content_html = content_html[m.end():]
+
+    parts = H2_RE.split(content_html)
+    intro, secs = parts[0], list(zip(parts[1::3], parts[2::3], parts[3::3]))
+    if not secs:
+        return lead, "", content_html
+
+    body = [f'<div class="ps-intro">{intro}</div>'] if intro.strip() else []
+    toc = []
+    for n, (sid, title, text) in enumerate(secs, 1):
+        plain = re.sub(r"<[^>]+>", "", title)
+        if plain.lower().startswith("questions"):
+            text = faq_to_details(text)
+            kind = " ps-faq"
+        else:
+            kind = ""
+        text = re.sub(r"<p>(See:|Also read:|See also:)", r'<p class="see">\1', text)
+        text = text.replace("<ol>", '<ol class="route-list">')
+        body.append(
+            f'<section class="ps rv{kind}" id="{sid}"><h2><span class="ps-n">{n:02d}</span>{title}</h2>'
+            f'<div class="ps-body">{text}</div></section>'
+        )
+        toc.append(f'<li><a href="#{sid}">{title}</a></li>')
+    toc_html = ""
+    if len(toc) >= 3:
+        toc_html = '<nav class="toc" aria-label="On this page"><p class="toc-h">On this page</p><ol>' + "".join(toc) + "</ol></nav>"
+    return lead, toc_html, "".join(body)
+
+
+def hero_picture(page: dict) -> str:
+    name = page["meta"].get("hero_image") or PAGE_HERO.get(page["url"], "")
+    if not name:
+        return ""
+    base = f"/static/img/doha/{name}"
+    return (
+        '<div class="ph-photo"><div class="img-wrap" data-parallax>'
+        f'<img src="{base}-1920.webp" srcset="{base}-960.webp 960w, {base}-1920.webp 1920w" '
+        'sizes="100vw" alt="" fetchpriority="high" decoding="async"></div></div>'
+    )
+
+
 def build_page(page: dict, site: dict, production: bool) -> None:
     body = fill_placeholders(page["body"], site, production)
     content_html = markdown.markdown(body, extensions=["tables", "toc"])
@@ -141,10 +235,23 @@ def build_page(page: dict, site: dict, production: bool) -> None:
         ).replace("{{ form_endpoint }}", site.get("form_endpoint", ""))
         content_html = content_html.replace("<p>[CONTACT_FORM]</p>", f'<div class="form-page">{long_form}</div>')
 
+    lead, toc_html, content_html = ("", "", content_html)
+    if page["url"] not in TEMPLATE_BY_URL and page["url"] != "/thank-you/":
+        lead, toc_html, content_html = structure_content(content_html)
+    hero_buttons = (
+        '<div class="hero-buttons"><a class="btn-pill" href="#enquiry"><span>Free consultation</span><i aria-hidden="true"><svg viewBox="0 0 16 16" width="16" height="16"><path d="M3 8h10M9 4l4 4-4 4" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></i></a>'
+        '<a class="btn btn-line" href="{{ whatsapp_url }}">Chat on WhatsApp</a></div>'
+        if wants_cta else ""
+    )
+
     template_name = TEMPLATE_BY_URL.get(page["url"], "page.html")
     template = (TEMPLATES / template_name).read_text(encoding="utf-8")
     out = render_includes(template)
     out = out.replace("{{ cta_block }}", cta_block)
+    out = out.replace("{{ lead }}", lead).replace("{{ toc }}", toc_html)
+    out = out.replace("{{ crumbs }}", build_crumbs(page["meta"].get("breadcrumb", "")))
+    out = out.replace("{{ hero_picture }}", hero_picture(page)).replace("{{ hero_buttons }}", hero_buttons)
+    out = out.replace("{{ page_class }}", "has-toc" if toc_html else "no-toc")
     out = out.replace("{{ form_extra }}", "")
     out = render_vars(
         out,
@@ -238,6 +345,11 @@ def main() -> None:
         sys.exit(
             "Production build stopped: [CONFIRM] markers are still in the content."
         )
+
+    for p in pages:
+        parts = [x.strip() for x in p["meta"].get("breadcrumb", "").split(">")]
+        if len(parts) > 1:
+            CRUMB_URLS[parts[-1]] = p["url"]
 
     clean_dist()
     copy_static()

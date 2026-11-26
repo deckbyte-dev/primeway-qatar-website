@@ -15,7 +15,7 @@
         <p class="hero-sub">Starting a company in Qatar means ministries, forms, stamps and waiting. We do that part. You get your licence, your cards and a clear idea of what comes next.</p>
         <!-- TODO: small line under buttons, "Reply within one working day", once the client confirms the reply time -->
         <div class="hero-buttons">
-          <a class="btn" href="/contact/">Free consultation</a>
+          <a class="btn-pill" href="/contact/"><span>Free consultation</span><i aria-hidden="true"><svg viewBox="0 0 16 16" width="16" height="16"><path d="M3 8h10M9 4l4 4-4 4" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></i></a>
           <a class="btn btn-line" href="{{ whatsapp_url }}">Chat on WhatsApp</a>
         </div>
       </div>
@@ -23,7 +23,16 @@
     <div class="hero-photo">
       <div class="img-wrap" data-parallax>
         <img src="/static/img/doha/panorama-calm-1920.webp" srcset="/static/img/doha/panorama-calm-960.webp 960w, /static/img/doha/panorama-calm-1920.webp 1920w" sizes="100vw" alt="The Doha skyline across the bay" fetchpriority="high" decoding="async">
+        <p class="hero-chip"><i aria-hidden="true"></i><span>Doha, Qatar</span><time data-clock></time></p>
       </div>
+    </div>
+    <div class="wrap">
+      <nav class="hero-links" aria-label="Our services">
+        <a href="/company-formation-qatar/"><span class="hl-n">01</span><span class="hl-t">Company formation</span><svg viewBox="0 0 16 16" width="16" height="16" aria-hidden="true"><path d="M3 13L13 3M5 3h8v8" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+        <a href="/pro-services-qatar/"><span class="hl-n">02</span><span class="hl-t">PRO services</span><svg viewBox="0 0 16 16" width="16" height="16" aria-hidden="true"><path d="M3 13L13 3M5 3h8v8" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+        <a href="/visa-services-qatar/"><span class="hl-n">03</span><span class="hl-t">Visas and cards</span><svg viewBox="0 0 16 16" width="16" height="16" aria-hidden="true"><path d="M3 13L13 3M5 3h8v8" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+        <a href="/document-attestation-qatar/"><span class="hl-n">04</span><span class="hl-t">Documents and trademarks</span><svg viewBox="0 0 16 16" width="16" height="16" aria-hidden="true"><path d="M3 13L13 3M5 3h8v8" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+      </nav>
     </div>
   </section>
 
@@ -35,7 +44,7 @@
         <p class="intro-clock rv"><i aria-hidden="true"></i><span>Doha, Qatar</span><time data-clock></time></p>
       </aside>
       <div class="intro-main">
-        <p class="fill statement">We started because small business owners kept losing weeks to simple mistakes: <mark class="hl">a wrong activity code</mark>, <mark class="hl">a document that was not attested</mark>, <mark class="hl">a renewal that was missed by two days</mark>. Our job is to prevent those.</p>
+        <p class="fill statement">We started because small business owners kept losing weeks to simple mistakes: a wrong activity code, a document that was not attested, a renewal that was missed by two days. Our job is to prevent those.</p>
         <!-- TODO: owner name, years in PRO work and one line of background, once the client confirms -->
         <div class="intro-foot">
           <p class="rv">Primeway for Trading and Services is a Qatar based company that does government paperwork for other companies.</p>
@@ -215,14 +224,31 @@
 
   <!-- FOREIGN OWNERS -->
   <section class="sec foreign">
-    <div class="wrap">
-      <p class="eyebrow rv">Foreign ownership</p>
-      <p class="big-100" aria-hidden="true"><span class="count" data-to="100">100</span>%</p>
-      <div class="foreign-row">
-        <h2 class="display-s split">Can a foreigner own 100 percent of a company in Qatar?</h2>
-        <div>
-          <p class="rv">In most sectors, yes. Since Law No. 1 of 2019, foreign investors can hold full ownership of a company with approval from the Ministry of Commerce and Industry. A few sectors, such as banking and insurance, have their own rules. We explain how it works and what the ministry looks at.</p>
-          <a class="btn-pill rv" href="/company-formation-qatar/100-percent-foreign-ownership/"><span>100 percent foreign ownership in Qatar</span><i aria-hidden="true"><svg viewBox="0 0 16 16" width="16" height="16"><path d="M3 8h10M9 4l4 4-4 4" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></i></a>
+    <div class="wrap fo-wrap">
+      <div class="fo-top">
+        <p class="eyebrow rv">Foreign ownership</p>
+        <p class="fo-tag rv">Law No. 1 of 2019</p>
+      </div>
+      <div class="fo-hero">
+        <p class="big-100" aria-hidden="true"><span class="count" data-to="100">100</span><sup>%</sup></p>
+      </div>
+      <div class="fo-cols">
+        <div class="fo-col">
+          <h2 class="fo-h lines">
+            <span class="ln" style="--i:0"><span>Can a foreigner own 100 percent</span></span>
+            <span class="ln" style="--i:1"><span class="dim">of a company in Qatar?</span></span>
+          </h2>
+        </div>
+        <div class="fo-col">
+          <p class="fo-lead rv"><b>In most sectors, yes.</b> Since Law No. 1 of 2019, foreign investors can hold full ownership of a company with approval from the Ministry of Commerce and Industry. A few sectors, such as banking and insurance, have their own rules. We explain how it works and what the ministry looks at.</p>
+        </div>
+        <div class="fo-col">
+          <dl class="fo-specs rv">
+            <div><dt>Law</dt><dd>No. 1 of 2019</dd></div>
+            <div><dt>Approval</dt><dd>Ministry of Commerce and Industry</dd></div>
+            <div><dt>Own rules</dt><dd>Banking and insurance</dd></div>
+          </dl>
+          <a class="fo-link rv" href="/company-formation-qatar/100-percent-foreign-ownership/"><span>100 percent foreign ownership in Qatar</span><i aria-hidden="true"><svg viewBox="0 0 16 16" width="18" height="18" aria-hidden="true"><path d="M3 8h10M9 4l4 4-4 4" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></i></a>
         </div>
       </div>
     </div>

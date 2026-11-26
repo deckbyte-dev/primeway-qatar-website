@@ -60,8 +60,11 @@
   if (h1 && !reduce) {
     var text = h1.textContent.trim();
     h1.setAttribute("aria-label", text);
+    var afterComma = false;
     h1.innerHTML = text.split(/\s+/).map(function (w, i) {
-      return '<span class="wm" aria-hidden="true"><span class="w" style="--i:' + i + '">' + w + "</span></span>";
+      var cls = "wm" + (afterComma ? " dim" : "");
+      if (/,$/.test(w)) afterComma = true;
+      return '<span class="' + cls + '" aria-hidden="true"><span class="w" style="--i:' + i + '">' + w + "</span></span>";
     }).join(" ");
   }
 
@@ -76,6 +79,9 @@
     });
   }
 
+  var heroPhoto = doc.querySelector(".hero-photo");
+  var heroImg = heroPhoto ? heroPhoto.querySelector(".img-wrap") : null;
+
   /* Reveal on enter: text blocks, headlines and image wipes */
   var targets = $$(".rv, .split, .lines, .band-rule, .ft-rule, .form, .steps, .img-wrap");
   if ("IntersectionObserver" in window && !reduce) {
@@ -89,10 +95,9 @@
     targets.forEach(function (t) { t.classList.add("in"); });
   }
 
-  /* Statement: words light up as you read, the three mistakes get underlined */
+  /* Statement: words light up as you read */
   var fill = doc.querySelector(".fill");
   var words = [];
-  var marks = [];
   if (fill && !reduce) {
     fill.setAttribute("aria-label", fill.textContent.trim());
     (function wrap(node) {
@@ -116,19 +121,16 @@
       });
     })(fill);
     words = $$(".fill .fw");
-    marks = $$(".fill mark").map(function (m) {
-      var inner = m.querySelectorAll(".fw");
-      return { el: m, last: words.indexOf(inner[inner.length - 1]) };
-    });
   }
 
   /* Live Doha time next to the intro label */
-  var clock = doc.querySelector("[data-clock]");
-  if (clock && window.Intl && Intl.DateTimeFormat) {
+  var clocks = $$("[data-clock]");
+  if (clocks.length && window.Intl && Intl.DateTimeFormat) {
     var tick = function () {
       try {
-        clock.textContent = new Intl.DateTimeFormat("en-GB", { hour: "2-digit", minute: "2-digit", hour12: false, timeZone: "Asia/Qatar" }).format(new Date());
-      } catch (e) { clock.textContent = ""; }
+        var tm = new Intl.DateTimeFormat("en-GB", { hour: "2-digit", minute: "2-digit", hour12: false, timeZone: "Asia/Qatar" }).format(new Date());
+        clocks.forEach(function (c) { c.textContent = tm; });
+      } catch (e) { clocks.forEach(function (c) { c.textContent = ""; }); }
     };
     tick();
     setInterval(tick, 20000);
@@ -266,7 +268,12 @@
         var prog = clamp((vh * 0.85 - r.top) / (r.height + vh * 0.35), 0, 1);
         var n = Math.round(prog * words.length);
         words.forEach(function (w, i) { w.classList.toggle("on", i < n); });
-        marks.forEach(function (m) { m.el.classList.toggle("on", n > m.last); });
+      }
+      if (heroImg && window.innerWidth > 700) {
+        var hb = heroImg.getBoundingClientRect();
+        var hp = clamp((vh * 0.98 - hb.top) / (vh * 0.62), 0, 1);
+        heroPhoto.style.setProperty("--hs", (0.88 + 0.12 * hp).toFixed(4));
+        heroPhoto.style.setProperty("--hr", (40 - 14 * hp).toFixed(1) + "px");
       }
       if (cards.length && window.innerWidth > 960) {
         cards.forEach(function (c, i) {

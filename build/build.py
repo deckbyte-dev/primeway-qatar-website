@@ -260,7 +260,7 @@ def build_page(page: dict, site: dict, production: bool) -> None:
             "title": html.escape(page["title"]),
             "description": html.escape(page["description"]),
             "canonical": site["domain"] + page["url"],
-            "robots": page["meta"].get("robots", "index, follow"),
+            "robots": page["meta"].get("robots", "index, follow") if production else "noindex, nofollow",
             "h1": html.escape(page["h1"]),
             "legal_name": site["legal_name"],
             "whatsapp_url": whatsapp_url(site),
@@ -355,6 +355,10 @@ def main() -> None:
     copy_static()
     for p in pages:
         build_page(p, site, production)
+
+    if not production:
+        # Staging: keep search engines out (Cloudflare Pages reads _headers)
+        (DIST / "_headers").write_text("/*\n  X-Robots-Tag: noindex, nofollow\n", encoding="utf-8")
 
     if production:
         for html_file in DIST.rglob("*.html"):

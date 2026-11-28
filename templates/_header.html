@@ -1,56 +1,29 @@
+{{ include:_icons.html }}
+<a class="skip" href="#main">Skip to content</a>
+<div class="preloader" aria-hidden="true">
+  <div class="pl-in"><img src="/static/img/logo/svg/primeway-icon-white.svg" alt="" width="84" height="84"><p><b data-pl>0</b><span>%</span></p></div>
+</div>
+<div class="progress" aria-hidden="true"><i></i></div>
+<div class="cursor" aria-hidden="true"></div>
 <header class="site-header">
-  <div class="wrap header-inner">
+  <div class="header-inner">
     <a href="/" class="logo" aria-label="Primeway home">
-      <img src="/static/img/logo/svg/primeway-horizontal-color.svg" alt="Primeway" width="185" height="36" />
+      <img src="/static/img/logo/svg/primeway-horizontal-white.svg" alt="Primeway" width="170" height="34">
     </a>
-    <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="site-nav">
-      <span class="sr-only">Menu</span>
-      <span class="nav-toggle-bars" aria-hidden="true"></span>
-    </button>
-    <nav class="main-nav" id="site-nav" aria-label="Main">
+    <nav class="main-nav" id="site-nav" aria-label="Main" data-lenis-prevent>
       <div class="has-menu">
-        <button class="menu-btn" type="button" aria-expanded="false" aria-controls="services-menu">Services</button>
+        <button class="menu-btn" type="button" aria-expanded="false" aria-controls="services-menu">Services <i aria-hidden="true"></i></button>
         <div class="mega" id="services-menu">
-          <div class="mega-col">
-            <a class="mega-head" href="/company-formation-qatar/">Company formation</a>
-            <ul>
-            <li><a href="/company-formation-qatar/llc/">LLC</a></li>
-            <li><a href="/company-formation-qatar/100-percent-foreign-ownership/">100 percent foreign ownership</a></li>
-            <li><a href="/company-formation-qatar/#free-zone-company-in-qatar">Free zone company</a></li>
-            <li><a href="/company-formation-qatar/#qatar-financial-centre-qfc-company-setup">Qatar Financial Centre (QFC)</a></li>
-            <li><a href="/company-formation-qatar/#representative-office-in-qatar">Representative office</a></li>
-            <li><a href="/company-formation-qatar/#e-commerce-licence-in-qatar">E-commerce licence</a></li>
-            <li><a href="/company-formation-qatar/#company-share-sale-and-transfer-in-qatar">Company share sale and transfer</a></li>
-            <li><a href="/company-formation-qatar/#corporate-bank-account-opening-in-qatar">Corporate bank account opening</a></li>
-            </ul>
-          </div>
-          <div class="mega-col">
-            <a class="mega-head" href="/pro-services-qatar/">PRO services</a>
-            <ul>
-            <li><a href="/pro-services-qatar/#single-window-and-moci-services">Single Window and MOCI</a></li>
-            <li><a href="/pro-services-qatar/#ministry-of-labour-services">Ministry of Labour</a></li>
-            <li><a href="/pro-services-qatar/#ministry-of-interior-services">Ministry of Interior</a></li>
-            <li><a href="/pro-services-qatar/#tax-authority-and-dhareeba-services">Tax Authority and Dhareeba</a></li>
-            <li><a href="/pro-services-qatar/#qatar-chamber-membership">Qatar Chamber membership</a></li>
-            <li><a href="/pro-services-qatar/#trade-licence-and-cr-renewal">Trade licence and CR renewal</a></li>
-            <li><a href="/pro-services-qatar/#company-cancellation-liquidation-in-qatar">Company cancellation</a></li>
-            <li><a href="/pro-services-qatar/#pro-work-packages">PRO work packages</a></li>
-            </ul>
-          </div>
-          <div class="mega-col">
-            <span class="mega-head">Visas and documents</span>
-            <ul>
-            <li><a href="/visa-services-qatar/">Visa services</a></li>
-            <li><a href="/document-attestation-qatar/">Document attestation</a></li>
-            <li><a href="/document-attestation-qatar/#translation-legal-translation-in-qatar">Legal translation</a></li>
-            <li><a href="/trademark-registration-qatar/">Trademark registration</a></li>
-            </ul>
-          </div>
+          <div class="mega-col"><a class="mega-head" href="/company-formation-qatar/">Company formation</a><ul><li><a href="/company-formation-qatar/llc/"><svg class="ic" aria-hidden="true"><use href="#i-building"/></svg><span>LLC</span></a></li><li><a href="/company-formation-qatar/100-percent-foreign-ownership/"><svg class="ic" aria-hidden="true"><use href="#i-percent"/></svg><span>100 percent foreign ownership</span></a></li><li><a href="/company-formation-qatar/#free-zone-company-in-qatar"><svg class="ic" aria-hidden="true"><use href="#i-globe"/></svg><span>Free zone company</span></a></li><li><a href="/company-formation-qatar/#qatar-financial-centre-qfc-company-setup"><svg class="ic" aria-hidden="true"><use href="#i-bank"/></svg><span>Qatar Financial Centre (QFC)</span></a></li><li><a href="/company-formation-qatar/#representative-office-in-qatar"><svg class="ic" aria-hidden="true"><use href="#i-briefcase"/></svg><span>Representative office</span></a></li><li><a href="/company-formation-qatar/#e-commerce-licence-in-qatar"><svg class="ic" aria-hidden="true"><use href="#i-cart"/></svg><span>E-commerce licence</span></a></li><li><a href="/company-formation-qatar/#company-share-sale-and-transfer-in-qatar"><svg class="ic" aria-hidden="true"><use href="#i-swap"/></svg><span>Company share sale and transfer</span></a></li><li><a href="/company-formation-qatar/#corporate-bank-account-opening-in-qatar"><svg class="ic" aria-hidden="true"><use href="#i-bank"/></svg><span>Corporate bank account opening</span></a></li></ul></div>
+          <div class="mega-col"><a class="mega-head" href="/pro-services-qatar/">PRO services</a><ul><li><a href="/pro-services-qatar/#single-window-and-moci-services"><svg class="ic" aria-hidden="true"><use href="#i-globe"/></svg><span>Single Window and MOCI</span></a></li><li><a href="/pro-services-qatar/#ministry-of-labour-services"><svg class="ic" aria-hidden="true"><use href="#i-briefcase"/></svg><span>Ministry of Labour</span></a></li><li><a href="/pro-services-qatar/#ministry-of-interior-services"><svg class="ic" aria-hidden="true"><use href="#i-shield"/></svg><span>Ministry of Interior</span></a></li><li><a href="/pro-services-qatar/#tax-authority-and-dhareeba-services"><svg class="ic" aria-hidden="true"><use href="#i-percent"/></svg><span>Tax Authority and Dhareeba</span></a></li><li><a href="/pro-services-qatar/#qatar-chamber-membership"><svg class="ic" aria-hidden="true"><use href="#i-building"/></svg><span>Qatar Chamber membership</span></a></li><li><a href="/pro-services-qatar/#trade-licence-and-cr-renewal"><svg class="ic" aria-hidden="true"><use href="#i-swap"/></svg><span>Trade licence and CR renewal</span></a></li><li><a href="/pro-services-qatar/#company-cancellation-liquidation-in-qatar"><svg class="ic" aria-hidden="true"><use href="#i-close"/></svg><span>Company cancellation</span></a></li><li><a href="/pro-services-qatar/#pro-work-packages"><svg class="ic" aria-hidden="true"><use href="#i-check"/></svg><span>PRO work packages</span></a></li></ul></div>
+          <div class="mega-col"><span class="mega-head">Visas and documents</span><ul><li><a href="/visa-services-qatar/"><svg class="ic" aria-hidden="true"><use href="#i-passport"/></svg><span>Visa services</span></a></li><li><a href="/document-attestation-qatar/"><svg class="ic" aria-hidden="true"><use href="#i-stamp"/></svg><span>Document attestation</span></a></li><li><a href="/document-attestation-qatar/#translation-legal-translation-in-qatar"><svg class="ic" aria-hidden="true"><use href="#i-translate"/></svg><span>Legal translation</span></a></li><li><a href="/trademark-registration-qatar/"><svg class="ic" aria-hidden="true"><use href="#i-shield"/></svg><span>Trademark registration</span></a></li></ul></div>
         </div>
       </div>
+      <a href="/#planner">Setup planner</a>
       <a href="/about/">About</a>
       <a href="/contact/">Contact</a>
-      <a href="/contact/" class="nav-cta">Free consultation</a>
     </nav>
+    <a class="btn btn-gold btn-sm nav-cta" href="/contact/" data-magnet><span class="btn-t">Free consultation</span><span class="btn-i"><svg class="ic" aria-hidden="true"><use href="#i-arrow"/></svg></span></a>
+    <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="site-nav"><span class="sr-only">Menu</span><i aria-hidden="true"></i></button>
   </div>
 </header>

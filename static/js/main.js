@@ -1,303 +1,353 @@
-/* Primeway site script. No dependencies. The site works without it. */
+/* Primeway site script. Lenis (smooth scroll) is optional; everything else is plain JS. */
 (function () {
-  var doc = document;
-  var reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-  var hoverOkM = window.matchMedia("(hover: hover) and (min-width: 961px)").matches;
+  window.__pw = true;
+  var doc = document, root = doc.documentElement;
+  var reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
+  var fine = matchMedia("(hover: hover) and (pointer: fine)").matches;
   var clamp = function (v, a, b) { return Math.min(b, Math.max(a, v)); };
-  var $$ = function (s) { return Array.prototype.slice.call(doc.querySelectorAll(s)); };
+  var $ = function (s, c) { return (c || doc).querySelector(s); };
+  var $$ = function (s, c) { return Array.prototype.slice.call((c || doc).querySelectorAll(s)); };
+  var canIO = "IntersectionObserver" in window;
 
-  /* Header: glass after scroll, hides while scrolling down */
-  var header = doc.querySelector(".site-header");
-  var lastY = window.scrollY;
-  function headerState() {
-    var y = window.scrollY;
-    header.classList.toggle("is-scrolled", y > 24);
-    if (!header.classList.contains("nav-open")) {
-      if (y > 240 && y > lastY + 6) header.classList.add("is-hidden");
-      else if (y < lastY - 6 || y <= 240) header.classList.remove("is-hidden");
+  var lenis = null;
+  if (window.Lenis && !reduce && fine) {
+    lenis = new window.Lenis({ lerp: 0.1, anchors: { offset: -90 } });
+    (function raf(t) { lenis.raf(t); requestAnimationFrame(raf); })(0);
+  }
+
+  /* ---- Split headlines into masked words ---- */
+  $$(".split").forEach(function (el) {
+    if (!reduce) {
+      var accent = (el.getAttribute("data-accent") || "").toLowerCase().split(" ").filter(Boolean);
+      var label = el.textContent.replace(/\s+/g, " ").trim();
+      var i = 0;
+      (function wrap(node, accented) {
+        Array.prototype.slice.call(node.childNodes).forEach(function (n) {
+          if (n.nodeType === 1) return wrap(n, accented);
+          if (n.nodeType !== 3) return;
+          var frag = doc.createDocumentFragment();
+          n.textContent.split(/(\s+)/).forEach(function (p) {
+            if (!p) return;
+            if (/^\s+$/.test(p)) return frag.appendChild(doc.createTextNode(" "));
+            var m = doc.createElement("span"), w = doc.createElement("span");
+            m.className = "wm"; m.setAttribute("aria-hidden", "true");
+            w.className = "w" + (accent.indexOf(p.toLowerCase()) > -1 ? " accent" : "");
+            w.style.setProperty("--i", i++); w.textContent = p;
+            m.appendChild(w); frag.appendChild(m);
+          });
+          node.replaceChild(frag, n);
+        });
+      })(el);
+      el.setAttribute("aria-label", label);
     }
-    lastY = y;
-  }
+    el.classList.add("ready");
+  });
 
-  /* Mobile menu */
-  var toggle = doc.querySelector(".nav-toggle");
-  var nav = doc.getElementById("site-nav");
-  function closeMenu() {
-    header.classList.remove("nav-open");
-    toggle.setAttribute("aria-expanded", "false");
-    doc.body.style.overflow = "";
-  }
-  if (toggle && nav) {
-    toggle.addEventListener("click", function () {
-      var open = header.classList.toggle("nav-open");
-      toggle.setAttribute("aria-expanded", open ? "true" : "false");
-      doc.body.style.overflow = open ? "hidden" : "";
-    });
-    nav.addEventListener("click", function (e) { if (e.target.closest("a")) closeMenu(); });
-    doc.addEventListener("keydown", function (e) {
-      if (e.key === "Escape" && header.classList.contains("nav-open")) { closeMenu(); toggle.focus(); }
-    });
-  }
-
-  /* Services menu: click toggles, hover opens on desktop, Escape closes */
-  var hm = doc.querySelector(".has-menu");
-  if (hm) {
-    var mb = hm.querySelector(".menu-btn");
-    var setOpen = function (o) { hm.classList.toggle("open", o); mb.setAttribute("aria-expanded", o ? "true" : "false"); };
-    mb.addEventListener("click", function () { setOpen(!hm.classList.contains("open")); });
-    if (hoverOkM) {
-      var t;
-      hm.addEventListener("pointerenter", function () { clearTimeout(t); setOpen(true); });
-      hm.addEventListener("pointerleave", function () { t = setTimeout(function () { setOpen(false); }, 160); });
-    }
-    doc.addEventListener("click", function (e) { if (!hm.contains(e.target)) setOpen(false); });
-    doc.addEventListener("keydown", function (e) { if (e.key === "Escape") { setOpen(false); } });
-    hm.addEventListener("click", function (e) { if (e.target.closest(".mega a")) { setOpen(false); if (typeof closeMenu === "function") closeMenu(); } });
-  }
-
-  /* Hero headline: words rise out of a mask */
-  var h1 = doc.querySelector(".hero h1");
-  if (h1 && !reduce) {
-    var text = h1.textContent.trim();
-    h1.setAttribute("aria-label", text);
-    var afterComma = false;
-    h1.innerHTML = text.split(/\s+/).map(function (w, i) {
-      var cls = "wm" + (afterComma ? " dim" : "");
-      if (/,$/.test(w)) afterComma = true;
-      return '<span class="' + cls + '" aria-hidden="true"><span class="w" style="--i:' + i + '">' + w + "</span></span>";
-    }).join(" ");
-  }
-
-  /* Section headlines: same word mask, triggered when they scroll into view */
-  if (!reduce) {
-    $$(".split").forEach(function (el) {
-      var txt = el.textContent.trim();
-      el.setAttribute("aria-label", txt);
-      el.innerHTML = txt.split(/\s+/).map(function (w, i) {
-        return '<span class="wm" aria-hidden="true"><span class="w" style="--i:' + i + '">' + w + "</span></span>";
-      }).join(" ");
-    });
-  }
-
-  var heroPhoto = doc.querySelector(".hero-photo");
-  var heroImg = heroPhoto ? heroPhoto.querySelector(".img-wrap") : null;
-
-  /* Reveal on enter: text blocks, headlines and image wipes */
-  var targets = $$(".rv, .split, .lines, .band-rule, .ft-rule, .form, .steps, .img-wrap");
-  if ("IntersectionObserver" in window && !reduce) {
+  /* ---- Preloader, then start the page ---- */
+  var pre = $(".preloader");
+  function start() {
+    doc.body.classList.add("ready-page");
+    var targets = $$(".rv, .split");
+    if (!canIO || reduce) return targets.forEach(function (t) { t.classList.add("in"); });
     var io = new IntersectionObserver(function (es) {
       es.forEach(function (e) {
         if (e.isIntersecting) { e.target.classList.add("in"); io.unobserve(e.target); }
       });
-    }, { rootMargin: "0px 0px -8% 0px", threshold: 0.08 });
+    }, { rootMargin: "0px 0px -6% 0px", threshold: 0.01 });
     targets.forEach(function (t) { io.observe(t); });
-  } else {
-    targets.forEach(function (t) { t.classList.add("in"); });
   }
-
-  /* Statement: words light up as you read */
-  var fill = doc.querySelector(".fill");
-  var words = [];
-  if (fill && !reduce) {
-    fill.setAttribute("aria-label", fill.textContent.trim());
-    (function wrap(node) {
-      Array.prototype.slice.call(node.childNodes).forEach(function (n) {
-        if (n.nodeType === 3) {
-          var parts = n.textContent.split(/(\s+)/);
-          var frag = doc.createDocumentFragment();
-          parts.forEach(function (p) {
-            if (!p) return;
-            if (/^\s+$/.test(p)) { frag.appendChild(doc.createTextNode(p)); return; }
-            var sp = doc.createElement("span");
-            sp.className = "fw";
-            sp.setAttribute("aria-hidden", "true");
-            sp.textContent = p;
-            frag.appendChild(sp);
-          });
-          node.replaceChild(frag, n);
-        } else if (n.nodeType === 1) {
-          wrap(n);
-        }
-      });
-    })(fill);
-    words = $$(".fill .fw");
-  }
-
-  /* Live Doha time next to the intro label */
-  var clocks = $$("[data-clock]");
-  if (clocks.length && window.Intl && Intl.DateTimeFormat) {
-    var tick = function () {
-      try {
-        var tm = new Intl.DateTimeFormat("en-GB", { hour: "2-digit", minute: "2-digit", hour12: false, timeZone: "Asia/Qatar" }).format(new Date());
-        clocks.forEach(function (c) { c.textContent = tm; });
-      } catch (e) { clocks.forEach(function (c) { c.textContent = ""; }); }
+  if (pre && root.classList.contains("first") && !reduce) {
+    var num = $("[data-pl]"), t0 = null;
+    var step = function (now) {
+      if (t0 === null) t0 = now;
+      var p = clamp((now - t0) / 1100, 0, 1);
+      num.textContent = Math.round(100 * (1 - Math.pow(1 - p, 3)));
+      if (p < 1) return requestAnimationFrame(step);
+      pre.classList.add("done");
+      setTimeout(start, 350);
+      setTimeout(function () { root.classList.remove("first"); }, 1200);
     };
-    tick();
-    setInterval(tick, 20000);
+    requestAnimationFrame(step);
+    /* never leave the curtain up (background tabs pause animation frames) */
+    setTimeout(function () { if (!pre.classList.contains("done")) { pre.classList.add("done"); root.classList.remove("first"); start(); } }, 2600);
+    try { sessionStorage.setItem("pw-seen", "1"); } catch (e) {}
+  } else {
+    root.classList.remove("first");
+    requestAnimationFrame(start);
+    setTimeout(start, 400);
   }
 
-  /* Route progress */
-  var steps = doc.querySelector(".steps");
-  var stepItems = steps ? $$(".steps li") : [];
-
-  /* Service cards: each card shrinks and dims as the next one slides over it */
-  var cards = $$(".stack .card");
-
-  /* CTA panel: teal light follows the pointer, the round button pulls toward it */
-  var panel = doc.querySelector(".band");
-  if (panel && hoverOkM && !reduce) {
-    var pr = 0;
-    panel.addEventListener("pointermove", function (e) {
-      if (pr) return;
-      pr = requestAnimationFrame(function () {
-        pr = 0;
-        var r = panel.getBoundingClientRect();
-        panel.style.setProperty("--mx", (e.clientX - r.left) + "px");
-        panel.style.setProperty("--my", (e.clientY - r.top) + "px");
-      });
+  /* ---- Header and menus ---- */
+  var header = $(".site-header"), toggle = $(".nav-toggle"), hm = $(".has-menu");
+  var lastY = scrollY;
+  function setMenu(open) {
+    header.classList.toggle("nav-open", open);
+    toggle.setAttribute("aria-expanded", open ? "true" : "false");
+    doc.body.style.overflow = open ? "hidden" : "";
+    if (lenis) lenis[open ? "stop" : "start"]();
+  }
+  toggle.addEventListener("click", function () { setMenu(!header.classList.contains("nav-open")); });
+  if (hm) {
+    var mb = $(".menu-btn", hm), timer;
+    var setSub = function (o) { hm.classList.toggle("open", o); mb.setAttribute("aria-expanded", o ? "true" : "false"); };
+    mb.addEventListener("click", function (e) {
+      /* with a mouse, hover already opened it: a click should not shut it again */
+      setSub(fine && innerWidth > 1020 && e.detail > 0 ? true : !hm.classList.contains("open"));
     });
+    hm.addEventListener("pointerenter", function (e) { if (e.pointerType === "mouse" && innerWidth > 1020) { clearTimeout(timer); setSub(true); } });
+    hm.addEventListener("pointerleave", function (e) { if (e.pointerType === "mouse" && innerWidth > 1020) timer = setTimeout(function () { setSub(false); }, 180); });
+    doc.addEventListener("click", function (e) { if (!hm.contains(e.target)) setSub(false); });
+  }
+  header.addEventListener("click", function (e) {
+    if (!e.target.closest("nav a")) return;
+    if (hm) hm.classList.remove("open");
+    setMenu(false);
+  });
+  doc.addEventListener("keydown", function (e) {
+    if (e.key !== "Escape") return;
+    if (hm) { hm.classList.remove("open"); $(".menu-btn", hm).setAttribute("aria-expanded", "false"); }
+    if (header.classList.contains("nav-open")) { setMenu(false); toggle.focus(); }
+  });
+
+  /* ---- Doha clock ---- */
+  var clocks = $$("[data-clock]");
+  var tick = function () {
+    try {
+      var t = new Intl.DateTimeFormat("en-GB", { hour: "2-digit", minute: "2-digit", hour12: false, timeZone: "Asia/Qatar" }).format(new Date());
+      clocks.forEach(function (c) { c.textContent = t; });
+    } catch (e) {}
+  };
+  tick(); setInterval(tick, 20000);
+
+  /* ---- Words light up as you read ---- */
+  var fill = $(".fill"), words = [];
+  if (fill && !reduce) {
+    var txt = fill.textContent.trim();
+    fill.innerHTML = '<span class="sr-only"></span><span aria-hidden="true">' + txt.split(/\s+/).map(function (w) { return '<span class="fw">' + w + "</span>"; }).join(" ") + "</span>";
+    fill.firstChild.textContent = txt;
+    words = $$(".fw", fill);
+  }
+
+  /* ---- Count up ---- */
+  if (canIO && !reduce) {
+    var cio = new IntersectionObserver(function (es) {
+      es.forEach(function (e) {
+        if (!e.isIntersecting) return;
+        cio.unobserve(e.target);
+        var el = e.target, to = +el.getAttribute("data-count"), from = to ? 0 : 60, s = null;
+        requestAnimationFrame(function run(now) {
+          if (s === null) s = now;
+          var p = clamp((now - s) / 1700, 0, 1);
+          el.textContent = Math.round(from + (to - from) * (1 - Math.pow(1 - p, 4)));
+          if (p < 1) requestAnimationFrame(run);
+        });
+      });
+    }, { threshold: 0.6 });
+    $$("[data-count]").forEach(function (c) { cio.observe(c); });
+  }
+
+  /* ---- Scroll-linked effects ---- */
+  var bar = $(".progress i"), par = $$("[data-parallax], .hero-bg"), big = $(".big100");
+  var route = $(".route"), track = route && $(".route-track", route), view = route && $(".route-view", route);
+  var travel = 0;
+  function layoutRoute() {
+    if (!route) return;
+    var on = innerWidth > 1020 && innerHeight > 620 && !reduce;
+    route.classList.toggle("is-h", on);
+    route.style.height = ""; track.style.removeProperty("--x");
+    if (!on) return;
+    travel = Math.max(0, track.scrollWidth - view.clientWidth);
+    route.style.height = (innerHeight + travel) + "px";
+  }
+  var waiting = false;
+  function frame() {
+    waiting = false;
+    var y = scrollY, vh = innerHeight, max = root.scrollHeight - vh;
+    bar.style.setProperty("--p", max > 0 ? (y / max).toFixed(4) : 0);
+    header.classList.toggle("is-scrolled", y > 30);
+    if (!header.classList.contains("nav-open") && !(hm && hm.classList.contains("open"))) {
+      if (y > 400 && y > lastY + 4) header.classList.add("is-hidden");
+      else if (y < lastY - 4 || y <= 400) header.classList.remove("is-hidden");
+    }
+    lastY = y;
+    if (reduce) return;
+    par.forEach(function (box) {
+      var r = box.parentElement.getBoundingClientRect();
+      if (r.bottom < 0 || r.top > vh) return;
+      var img = box.firstElementChild, spare = img.offsetHeight - box.offsetHeight;
+      var p = clamp((vh - r.top) / (vh + r.height), 0, 1);
+      /* top-of-page heroes start flush; other photos travel across their spare height */
+      var py = box.parentElement.offsetTop === 0 ? -spare * clamp(y / r.height, 0, 1) : -spare * (1 - p);
+      img.style.setProperty("--py", py.toFixed(1) + "px");
+    });
+    if (words.length) {
+      var f = fill.getBoundingClientRect();
+      var n = Math.round(clamp((vh * 0.85 - f.top) / (f.height + vh * 0.25), 0, 1) * words.length);
+      words.forEach(function (w, i) { w.classList.toggle("on", i < n); });
+    }
+    if (big) {
+      var b = big.getBoundingClientRect(), bp = clamp((vh - b.top) / (vh * 0.8), 0, 1);
+      big.style.setProperty("--s", (0.7 + 0.3 * bp).toFixed(3));
+      big.style.setProperty("--bg", (30 + 50 * bp).toFixed(1) + "%");
+    }
+    if (route && route.classList.contains("is-h")) {
+      var rr = route.getBoundingClientRect(), rp = travel ? clamp(-rr.top / travel, 0, 1) : 0;
+      track.style.setProperty("--x", (-rp * travel).toFixed(1) + "px");
+      route.style.setProperty("--p", rp.toFixed(4));
+    }
+  }
+  function req() { if (!waiting) { waiting = true; requestAnimationFrame(frame); } }
+  addEventListener("scroll", req, { passive: true });
+  addEventListener("resize", function () { layoutRoute(); req(); });
+  addEventListener("load", function () { layoutRoute(); req(); });
+  if (doc.fonts) doc.fonts.ready.then(function () { layoutRoute(); req(); });
+  layoutRoute(); frame();
+
+  /* ---- Hero: drifting city lights ---- */
+  var cv = $(".hero-lights");
+  if (cv && !reduce && cv.getContext) {
+    var cx = cv.getContext("2d"), W = 0, H = 0, dots = [], visible = true, mx = -999, my = -999;
+    var colors = ["79,227,204", "246,189,90", "255,255,255"];
+    var size = function () {
+      var d = Math.min(devicePixelRatio || 1, 2);
+      W = cv.clientWidth; H = cv.clientHeight; cv.width = W * d; cv.height = H * d; cx.setTransform(d, 0, 0, d, 0, 0);
+      dots = [];
+      for (var i = 0, n = Math.min(90, W / 14); i < n; i++) dots.push({ x: Math.random() * W, y: Math.random() * H, r: Math.random() * 2.2 + .5, v: Math.random() * .35 + .08, c: colors[i % 3], t: Math.random() * 6 });
+    };
+    var draw = function (now) {
+      requestAnimationFrame(draw);
+      if (!visible) return;
+      cx.clearRect(0, 0, W, H);
+      dots.forEach(function (p) {
+        p.y -= p.v; p.x += Math.sin(now / 2400 + p.t) * .18;
+        var dx = p.x - mx, dy = p.y - my, d = Math.hypot(dx, dy);
+        if (d < 130 && d > 0) { p.x += dx / d * 1.6; p.y += dy / d * 1.6; }
+        if (p.y < -8) { p.y = H + 8; p.x = Math.random() * W; }
+        var a = .35 + Math.sin(now / 700 + p.t) * .3;
+        cx.fillStyle = "rgba(" + p.c + "," + a.toFixed(2) + ")";
+        cx.beginPath(); cx.arc(p.x, p.y, p.r, 0, 7); cx.fill();
+      });
+    };
+    size(); addEventListener("resize", size); requestAnimationFrame(draw);
+    cv.parentElement.addEventListener("pointermove", function (e) { var r = cv.getBoundingClientRect(); mx = e.clientX - r.left; my = e.clientY - r.top; });
+    if (canIO) new IntersectionObserver(function (es) { visible = es[0].isIntersecting; }).observe(cv);
+  }
+
+  /* ---- Mouse: cursor ring, magnetic buttons, tilting tiles ---- */
+  if (fine && !reduce) {
+    var cur = $(".cursor"), tx = 0, ty = 0, x = 0, y2 = 0;
+    addEventListener("pointermove", function (e) {
+      tx = e.clientX; ty = e.clientY; cur.classList.add("on");
+      cur.classList.toggle("big", !!e.target.closest("a, button, summary, label, .panel"));
+    });
+    root.addEventListener("pointerleave", function () { cur.classList.remove("on"); });
+    (function follow() { x += (tx - x) * .2; y2 += (ty - y2) * .2; cur.style.transform = "translate3d(" + x + "px," + y2 + "px,0)"; requestAnimationFrame(follow); })();
     $$("[data-magnet]").forEach(function (el) {
-      var core = el;
       el.addEventListener("pointermove", function (e) {
         var r = el.getBoundingClientRect();
-        core.style.setProperty("--tx", ((e.clientX - r.left - r.width / 2) * 0.18).toFixed(1) + "px");
-        core.style.setProperty("--ty", ((e.clientY - r.top - r.height / 2) * 0.18).toFixed(1) + "px");
+        el.style.setProperty("--tx", ((e.clientX - r.left - r.width / 2) * .16).toFixed(1) + "px");
+        el.style.setProperty("--ty", ((e.clientY - r.top - r.height / 2) * .28).toFixed(1) + "px");
       });
-      el.addEventListener("pointerleave", function () {
-        core.style.setProperty("--tx", "0px");
-        core.style.setProperty("--ty", "0px");
+      el.addEventListener("pointerleave", function () { el.style.removeProperty("--tx"); el.style.removeProperty("--ty"); });
+    });
+    $$("[data-tilt]").forEach(function (el) {
+      el.addEventListener("pointermove", function (e) {
+        var r = el.getBoundingClientRect(), px = (e.clientX - r.left) / r.width, py = (e.clientY - r.top) / r.height;
+        el.style.setProperty("--mx", (px * 100) + "%"); el.style.setProperty("--my", (py * 100) + "%");
+        el.style.setProperty("--ry", ((px - .5) * 7).toFixed(2) + "deg"); el.style.setProperty("--rx", ((.5 - py) * 7).toFixed(2) + "deg");
       });
+      el.addEventListener("pointerleave", function () { el.style.removeProperty("--rx"); el.style.removeProperty("--ry"); });
     });
   }
 
-  /* Enquiry box: a thin line along the top fills as the required fields are done */
-  var enq = doc.querySelector(".final-form form");
-  if (enq) {
-    var box = enq.parentElement;
-    var fillBar = function () {
-      var n = enq.elements.name.value.trim() ? 1 : 0;
-      var ph = enq.elements.phone.value.replace(/\D/g, "").length >= 7 ? 1 : 0;
-      var ok = enq.elements.consent.checked ? 1 : 0;
-      box.style.setProperty("--p", ((n + ph + ok) / 3).toFixed(3));
+  /* ---- Company type panels ---- */
+  var panels = $$(".panel");
+  panels.forEach(function (p) {
+    var open = function () { panels.forEach(function (o) { o.classList.toggle("on", o === p); }); };
+    p.addEventListener("click", open);
+    p.addEventListener("focusin", open);
+    p.addEventListener("pointerenter", function (e) { if (e.pointerType === "mouse") open(); });
+    p.addEventListener("transitionend", function (e) { if (e.target === p) req(); });
+  });
+
+  /* ---- Setup planner ---- */
+  var planner = $(".pl-form");
+  if (planner) {
+    /* Wording follows the page content in content/pages/. */
+    var TYPES = {
+      llc: { name: "LLC on the mainland", note: "The usual choice if you want to sell to customers anywhere in Qatar.", docs: ["A lease or address for the office", "Details of the business activity", "Three or four trade name options"] },
+      fz: { name: "Free zone company", note: "Good for export and storage, with limits on selling inside Qatar. We confirm the current zone rules before you apply.", docs: ["Details of the business activity", "Three or four trade name options"] },
+      qfc: { name: "QFC company", note: "For financial and professional services. The QFC has its own legal framework and tax regime.", docs: ["Details of the business activity", "Name options for the company"] },
+      rep: { name: "Representative office", note: "To explore the market and promote the parent company. It cannot invoice or earn income in Qatar.", docs: ["Parent company documents, attested and translated into Arabic", "An address for the office"] },
+      ecom: { name: "E-commerce licence", note: "Issued through Single Window with a commercial registration. Some products need extra approval.", docs: ["A list of what you will sell", "Three or four trade name options", "Your website, app or social page details"] }
     };
-    enq.addEventListener("input", fillBar);
-    enq.addEventListener("change", fillBar);
-    fillBar();
+    var OWNERS = {
+      res: ["Passport copies of all owners", "Qatar ID of owners living in Qatar"],
+      abroad: ["Passport copies of all owners", "Power of attorney, if a step is done for you in Qatar"],
+      corp: ["The owner company's incorporation papers, attested if issued abroad", "Arabic translation of foreign documents"]
+    };
+    var EXTRA = {
+      visa: "Visas: staff passport copies, requested after the company is set up",
+      attest: "Attestation: the original documents to be attested",
+      trans: "Translation: clear scans of the documents to translate",
+      tm: "Trademark: your logo or brand name and what you sell under it",
+      bank: "Bank account: a resolution naming the signatories, once the CR and cards are issued"
+    };
+    var out = $(".pl-out"), list = $(".pl-list", out), plan = {};
+    var render = function () {
+      var type = planner.querySelector("[name=type]:checked").value;
+      var owner = planner.querySelector("[name=owner]:checked").value;
+      var extras = $$("[name=extra]:checked", planner);
+      var t = TYPES[type];
+      var docs = OWNERS[owner].concat(t.docs, extras.map(function (e) { return EXTRA[e.value]; }));
+      docs = docs.filter(function (d, i) { return docs.indexOf(d) === i; });
+      $(".pl-title", out).textContent = t.name;
+      $(".pl-note", out).textContent = t.note;
+      list.textContent = "";
+      docs.forEach(function (d, i) { var li = doc.createElement("li"); li.textContent = d; li.style.animationDelay = (i * 40) + "ms"; list.appendChild(li); });
+      var label = function (i) { return i.nextElementSibling.textContent; };
+      plan.text = "I would like a written quote.\nCompany type: " + t.name +
+        "\nOwners: " + label(planner.querySelector("[name=owner]:checked")) +
+        (extras.length ? "\nAlso need: " + extras.map(label).join(", ") : "");
+    };
+    planner.addEventListener("change", render);
+    render();
+    $(".pl-send", out).addEventListener("click", function () {
+      var form = $("#enquiry form");
+      if (!form) return;
+      form.elements.message.value = plan.text;
+      form.elements.service.value = "Company formation";
+      var target = $("#enquiry .final-card");
+      if (lenis) lenis.scrollTo(target, { offset: -90 });
+      else target.scrollIntoView({ behavior: reduce ? "auto" : "smooth", block: "start" });
+      form.elements.name.focus({ preventScroll: true });
+    });
   }
 
-  /* Footer: smooth back to top */
+  /* ---- Table of contents highlight (inner pages) ---- */
+  var links = $$(".toc a");
+  if (links.length && canIO) {
+    var map = {}, current = null;
+    links.forEach(function (a) { map[a.getAttribute("href").slice(1)] = a; });
+    var tio = new IntersectionObserver(function (es) {
+      es.forEach(function (e) {
+        if (!e.isIntersecting) return;
+        if (current) current.classList.remove("on");
+        current = map[e.target.id];
+        if (!current) return;
+        current.classList.add("on");
+        var box = current.closest(".toc");
+        if (box.scrollHeight > box.clientHeight && innerWidth > 1020) box.scrollTop = current.offsetTop - box.clientHeight / 3;
+      });
+    }, { rootMargin: "-20% 0px -70% 0px" });
+    $$(".ps[id]").forEach(function (s) { tio.observe(s); });
+  }
+
+  /* ---- Back to top ---- */
   $$("[data-top]").forEach(function (a) {
     a.addEventListener("click", function (e) {
       e.preventDefault();
-      window.scrollTo({ top: 0, behavior: reduce ? "auto" : "smooth" });
+      if (lenis) lenis.scrollTo(0); else scrollTo({ top: 0, behavior: reduce ? "auto" : "smooth" });
     });
   });
-
-  /* FAQ: the big counter follows the open question */
-  var faqItems = $$(".faq-item");
-  var faqNum = doc.querySelector(".faq-count b");
-  if (faqNum) {
-    faqItems.forEach(function (d, i) {
-      d.addEventListener("toggle", function () {
-        if (!d.open) return;
-        faqNum.textContent = ("0" + (i + 1)).slice(-2);
-        if (!reduce && faqNum.animate) {
-          faqNum.animate([{ opacity: 0, transform: "translateY(10px)" }, { opacity: 1, transform: "none" }], { duration: 600, easing: "cubic-bezier(.2,.7,.2,1)" });
-        }
-      });
-    });
-  }
-
-  /* Company types: the photo follows the open item, and previews on hover */
-  var tGrid = doc.querySelector(".types-grid");
-  var tItems = $$(".types-list details");
-  if (tGrid && tItems.length) {
-    var tN = tGrid.querySelector(".tc-n"), tName = tGrid.querySelector(".tc-name"), tOf = tGrid.querySelector(".tc-of");
-    var tOpen = function () { for (var k = 0; k < tItems.length; k++) if (tItems[k].open) return k; return 0; };
-    var showType = function (i) {
-      tGrid.setAttribute("data-img", i);
-      var nn = ("0" + (i + 1)).slice(-2);
-      if (tN) tN.textContent = nn;
-      if (tOf) tOf.textContent = nn + " / " + ("0" + tItems.length).slice(-2);
-      if (tName) tName.textContent = tItems[i].querySelector(".t-name").textContent;
-    };
-    tItems.forEach(function (d, i) {
-      d.addEventListener("toggle", function () { if (d.open) showType(i); });
-      d.querySelector("summary").addEventListener("mouseenter", function () { showType(i); });
-    });
-    var tList = doc.querySelector(".types-list");
-    tList.addEventListener("mouseleave", function () { showType(tOpen()); });
-    showType(tOpen());
-  }
-
-  /* Count up */
-  var count = doc.querySelector(".count");
-  if (count && "IntersectionObserver" in window && !reduce) {
-    var to = +count.getAttribute("data-to") || 100;
-    count.textContent = "0";
-    var cio = new IntersectionObserver(function (es) {
-      if (!es[0].isIntersecting) return;
-      cio.disconnect();
-      var t0 = performance.now();
-      (function tick(n) {
-        var p = clamp((n - t0) / 1600, 0, 1);
-        count.textContent = Math.round(to * (1 - Math.pow(1 - p, 3)));
-        if (p < 1) requestAnimationFrame(tick);
-      })(t0);
-    }, { threshold: 0.5 });
-    cio.observe(count);
-  }
-
-  /* Scroll-linked: parallax, words, route */
-  var par = $$("[data-parallax] img, [data-parallax-img]");
-  var ticking = false;
-  function frame() {
-    ticking = false;
-    var vh = window.innerHeight;
-    headerState();
-    if (!reduce) {
-      par.forEach(function (img) {
-        var box = img.parentElement.getBoundingClientRect();
-        if (box.bottom < -100 || box.top > vh + 100) return;
-        var p = (box.top + box.height / 2 - vh / 2) / vh; /* -1..1 */
-        var max = img.offsetHeight - box.height;
-        img.style.setProperty("--py", (-max / 2 + clamp(p, -1, 1) * -max / 2).toFixed(1) + "px");
-      });
-      if (words.length) {
-        var r = fill.getBoundingClientRect();
-        var prog = clamp((vh * 0.85 - r.top) / (r.height + vh * 0.35), 0, 1);
-        var n = Math.round(prog * words.length);
-        words.forEach(function (w, i) { w.classList.toggle("on", i < n); });
-      }
-      if (heroImg && window.innerWidth > 700) {
-        var hb = heroImg.getBoundingClientRect();
-        var hp = clamp((vh * 0.98 - hb.top) / (vh * 0.62), 0, 1);
-        heroPhoto.style.setProperty("--hs", (0.88 + 0.12 * hp).toFixed(4));
-        heroPhoto.style.setProperty("--hr", (40 - 14 * hp).toFixed(1) + "px");
-      }
-      if (cards.length && window.innerWidth > 960) {
-        cards.forEach(function (c, i) {
-          var inner = c.firstElementChild;
-          var next = cards[i + 1];
-          var k = 0;
-          if (next) {
-            var gap = next.getBoundingClientRect().top - c.getBoundingClientRect().top;
-            k = clamp(1 - gap / c.offsetHeight, 0, 1);
-          }
-          inner.style.setProperty("--sc", (1 - k * 0.05).toFixed(4));
-          inner.style.setProperty("--dim", (k * 0.16).toFixed(3));
-        });
-      }
-      if (steps) {
-        var s = steps.getBoundingClientRect();
-        var sp = clamp((vh * 0.8 - s.top) / (s.height + vh * 0.2), 0, 1);
-        steps.style.setProperty("--p", sp.toFixed(3));
-        stepItems.forEach(function (li, i) { li.classList.toggle("on", sp > i / stepItems.length + 0.02); });
-      }
-    }
-  }
-  function req() { if (!ticking) { ticking = true; requestAnimationFrame(frame); } }
-  window.addEventListener("scroll", req, { passive: true });
-  window.addEventListener("resize", req);
-  frame();
 })();

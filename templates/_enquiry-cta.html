@@ -1,12 +1,14 @@
 <section class="final" id="enquiry">
-  <div class="wrap final-inner">
+  <div class="aurora" aria-hidden="true"><i></i><i></i><i></i></div>
+  <div class="wrap final-grid">
     <div class="final-copy">
-      <h2 class="split">Tell us what you need</h2>
+      <p class="kicker rv">Free consultation</p>
+      <h2 class="h-xl split">Tell us what you <em>need</em></h2>
       <p class="rv">Send a short message. We will reply with the steps, the documents and the cost for your case. No charge for the first call.</p>
-      <p class="rv"><a class="text-link" href="{{ whatsapp_url }}">Or chat on WhatsApp</a></p>
+      <div class="rv"><a class="btn btn-ghost" href="{{ whatsapp_url }}" data-magnet><span class="btn-t">Or chat on WhatsApp</span><span class="btn-i"><svg class="ic" aria-hidden="true"><use href="#i-chat"/></svg></span></a></div>
     </div>
-    <div class="final-form">
-{{ include:_enquiry-form-inline.html }}
+    <div class="final-card rv">
+{{ include:_enquiry-form.html }}
     </div>
   </div>
 </section>

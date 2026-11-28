@@ -2,22 +2,20 @@
 <html lang="en">
 <head>
 {{ include:_head.html }}
-<link rel="stylesheet" href="/static/css/inner.css">
-<script src="/static/js/inner.js" defer></script>
 </head>
 <body class="inner">
 {{ include:_header.html }}
-<main>
+<main id="main">
   <section class="ph">
-    <div class="wrap">
+    {{ hero_picture }}
+    <div class="wrap ph-in">
       {{ crumbs }}
-      <h1 class="ph-h">{{ h1 }}</h1>
+      <h1 class="ph-h split">{{ h1 }}</h1>
       <div class="ph-row">
-        <div class="ph-lead">{{ lead }}</div>
+        <div class="ph-lead rv">{{ lead }}</div>
         {{ hero_buttons }}
       </div>
     </div>
-    {{ hero_picture }}
   </section>
   <div class="pbody {{ page_class }}">
     <div class="wrap pbody-grid">
@@ -27,6 +25,7 @@
       </article>
     </div>
   </div>
+  {{ related }}
   {{ cta_block }}
 </main>
 {{ include:_footer.html }}

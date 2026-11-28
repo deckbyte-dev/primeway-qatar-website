@@ -200,25 +200,54 @@ def structure_content(content_html: str) -> tuple[str, str, str]:
         text = re.sub(r"<p>(See:|Also read:|See also:)", r'<p class="see">\1', text)
         text = text.replace("<ol>", '<ol class="route-list">')
         body.append(
-            f'<section class="ps rv{kind}" id="{sid}"><h2><span class="ps-n">{n:02d}</span>{title}</h2>'
+            f'<section class="ps rv{kind}" id="{sid}"><span class="ps-n" aria-hidden="true">{n:02d}</span><h2>{title}</h2>'
             f'<div class="ps-body">{text}</div></section>'
         )
         toc.append(f'<li><a href="#{sid}">{title}</a></li>')
     toc_html = ""
     if len(toc) >= 3:
-        toc_html = '<nav class="toc" aria-label="On this page"><p class="toc-h">On this page</p><ol>' + "".join(toc) + "</ol></nav>"
+        toc_html = '<nav class="toc" aria-label="On this page" data-lenis-prevent><p class="toc-h">On this page</p><ol>' + "".join(toc) + "</ol></nav>"
     return lead, toc_html, "".join(body)
 
 
 def hero_picture(page: dict) -> str:
-    name = page["meta"].get("hero_image") or PAGE_HERO.get(page["url"], "")
-    if not name:
-        return ""
+    name = page["meta"].get("hero_image") or PAGE_HERO.get(page["url"], "skyline-dusk")
     base = f"/static/img/doha/{name}"
     return (
-        '<div class="ph-photo"><div class="img-wrap" data-parallax>'
+        '<div class="ph-bg" data-parallax>'
         f'<img src="{base}-1920.webp" srcset="{base}-960.webp 960w, {base}-1920.webp 1920w" '
-        'sizes="100vw" alt="" fetchpriority="high" decoding="async"></div></div>'
+        'sizes="100vw" alt="" fetchpriority="high" decoding="async"></div>'
+    )
+
+
+def button(href: str, label: str, cls: str, icon: str = "arrow") -> str:
+    return (
+        f'<a class="btn {cls}" href="{href}" data-magnet><span class="btn-t">{label}</span>'
+        f'<span class="btn-i"><svg class="ic" aria-hidden="true"><use href="#i-{icon}"/></svg></span></a>'
+    )
+
+
+# "Keep exploring" cards at the foot of service pages.
+RELATED = [
+    ("/company-formation-qatar/", "Company formation", "building"),
+    ("/pro-services-qatar/", "PRO services", "briefcase"),
+    ("/visa-services-qatar/", "Visa services", "passport"),
+    ("/document-attestation-qatar/", "Document attestation", "stamp"),
+    ("/trademark-registration-qatar/", "Trademark registration", "shield"),
+]
+
+
+def related_block(url: str) -> str:
+    if url in ("/thank-you/", "/privacy-policy/", "/terms/", "/contact/"):
+        return ""
+    cards = "".join(
+        f'<a class="rel rv" href="{href}"><svg class="ic" aria-hidden="true"><use href="#i-{icon}"/></svg>'
+        f'<span>{label}</span><svg class="ic go" aria-hidden="true"><use href="#i-up"/></svg></a>'
+        for href, label, icon in [r for r in RELATED if r[0] != url][:4]
+    )
+    return (
+        '<section class="related"><div class="wrap"><h2 class="h-l split">Keep <em>exploring</em></h2>'
+        f'<div class="rel-grid">{cards}</div></div></section>'
     )
 
 
@@ -239,8 +268,10 @@ def build_page(page: dict, site: dict, production: bool) -> None:
     if page["url"] not in TEMPLATE_BY_URL and page["url"] != "/thank-you/":
         lead, toc_html, content_html = structure_content(content_html)
     hero_buttons = (
-        '<div class="hero-buttons"><a class="btn-pill" href="#enquiry"><span>Free consultation</span><i aria-hidden="true"><svg viewBox="0 0 16 16" width="16" height="16"><path d="M3 8h10M9 4l4 4-4 4" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></i></a>'
-        '<a class="btn btn-line" href="{{ whatsapp_url }}">Chat on WhatsApp</a></div>'
+        '<div class="hero-buttons rv">'
+        + button("#enquiry", "Free consultation", "btn-gold")
+        + button("{{ whatsapp_url }}", "Chat on WhatsApp", "btn-ghost", "chat")
+        + "</div>"
         if wants_cta else ""
     )
 
@@ -252,6 +283,7 @@ def build_page(page: dict, site: dict, production: bool) -> None:
     out = out.replace("{{ crumbs }}", build_crumbs(page["meta"].get("breadcrumb", "")))
     out = out.replace("{{ hero_picture }}", hero_picture(page)).replace("{{ hero_buttons }}", hero_buttons)
     out = out.replace("{{ page_class }}", "has-toc" if toc_html else "no-toc")
+    out = out.replace("{{ related }}", related_block(page["url"]))
     out = out.replace("{{ form_extra }}", "")
     out = render_vars(
         out,

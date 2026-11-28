@@ -5,313 +5,222 @@
 </head>
 <body class="home">
 {{ include:_header.html }}
-<main>
+<main id="main">
 
   <!-- HERO -->
   <section class="hero">
-    <div class="wrap">
-      <h1>{{ h1 }}</h1>
+    <div class="hero-bg"><img src="/static/img/doha/skyline-dusk-1920.webp" srcset="/static/img/doha/skyline-dusk-960.webp 960w, /static/img/doha/skyline-dusk-1920.webp 1920w" sizes="100vw" alt="The Doha skyline lit up at dusk" decoding="async" fetchpriority="high"></div>
+    <canvas class="hero-lights" aria-hidden="true"></canvas>
+    <div class="wrap hero-in">
+      <p class="hero-chip"><i aria-hidden="true"></i><span>Doha, Qatar</span><time data-clock></time></p>
+      <h1 class="hero-h split" data-accent="done properly">{{ h1 }}</h1>
       <div class="hero-row">
         <p class="hero-sub">Starting a company in Qatar means ministries, forms, stamps and waiting. We do that part. You get your licence, your cards and a clear idea of what comes next.</p>
-        <!-- TODO: small line under buttons, "Reply within one working day", once the client confirms the reply time -->
         <div class="hero-buttons">
-          <a class="btn-pill" href="/contact/"><span>Free consultation</span><i aria-hidden="true"><svg viewBox="0 0 16 16" width="16" height="16"><path d="M3 8h10M9 4l4 4-4 4" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></i></a>
-          <a class="btn btn-line" href="{{ whatsapp_url }}">Chat on WhatsApp</a>
+          <a class="btn btn-gold" href="/contact/" data-magnet><span class="btn-t">Free consultation</span><span class="btn-i"><svg class="ic" aria-hidden="true"><use href="#i-arrow"/></svg></span></a>
+          <a class="btn btn-ghost" href="#planner" data-magnet><span class="btn-t">Plan my setup</span><span class="btn-i"><svg class="ic" aria-hidden="true"><use href="#i-arrow"/></svg></span></a>
         </div>
       </div>
     </div>
-    <div class="hero-photo">
-      <div class="img-wrap" data-parallax>
-        <img src="/static/img/doha/panorama-calm-1920.webp" srcset="/static/img/doha/panorama-calm-960.webp 960w, /static/img/doha/panorama-calm-1920.webp 1920w" sizes="100vw" alt="The Doha skyline across the bay" fetchpriority="high" decoding="async">
-        <p class="hero-chip"><i aria-hidden="true"></i><span>Doha, Qatar</span><time data-clock></time></p>
-      </div>
-    </div>
-    <div class="wrap">
-      <nav class="hero-links" aria-label="Our services">
-        <a href="/company-formation-qatar/"><span class="hl-n">01</span><span class="hl-t">Company formation</span><svg viewBox="0 0 16 16" width="16" height="16" aria-hidden="true"><path d="M3 13L13 3M5 3h8v8" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
-        <a href="/pro-services-qatar/"><span class="hl-n">02</span><span class="hl-t">PRO services</span><svg viewBox="0 0 16 16" width="16" height="16" aria-hidden="true"><path d="M3 13L13 3M5 3h8v8" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
-        <a href="/visa-services-qatar/"><span class="hl-n">03</span><span class="hl-t">Visas and cards</span><svg viewBox="0 0 16 16" width="16" height="16" aria-hidden="true"><path d="M3 13L13 3M5 3h8v8" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
-        <a href="/document-attestation-qatar/"><span class="hl-n">04</span><span class="hl-t">Documents and trademarks</span><svg viewBox="0 0 16 16" width="16" height="16" aria-hidden="true"><path d="M3 13L13 3M5 3h8v8" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
-      </nav>
-    </div>
+    <a class="badge" href="#planner" aria-label="Plan my company setup">
+      <svg viewBox="0 0 120 120" aria-hidden="true"><defs><path id="circ" d="M60 60m-45 0a45 45 0 1 1 90 0a45 45 0 1 1-90 0"/></defs><text><textPath href="#circ" textLength="278">PLAN YOUR SETUP • START IN QATAR •</textPath></text></svg>
+      <svg class="ic" aria-hidden="true"><use href="#i-arrow"/></svg>
+    </a>
+    <nav class="wrap hero-links" aria-label="Our services">
+      <a href="/company-formation-qatar/"><svg class="ic" aria-hidden="true"><use href="#i-building"/></svg><span><small>01</small>Company formation</span></a>
+      <a href="/pro-services-qatar/"><svg class="ic" aria-hidden="true"><use href="#i-briefcase"/></svg><span><small>02</small>PRO services</span></a>
+      <a href="/visa-services-qatar/"><svg class="ic" aria-hidden="true"><use href="#i-passport"/></svg><span><small>03</small>Visas and cards</span></a>
+      <a href="/document-attestation-qatar/"><svg class="ic" aria-hidden="true"><use href="#i-stamp"/></svg><span><small>04</small>Documents and trademarks</span></a>
+    </nav>
   </section>
+
+  <!-- MARQUEE -->
+  <div class="ribbons" aria-hidden="true">
+    <div class="mq mq-a"><div class="mq-track"><div><span>Company formation</span><i></i><span>PRO services</span><i></i><span>Visa services</span><i></i><span>Document attestation</span><i></i><span>Legal translation</span><i></i><span>Trademark registration</span><i></i></div><div><span>Company formation</span><i></i><span>PRO services</span><i></i><span>Visa services</span><i></i><span>Document attestation</span><i></i><span>Legal translation</span><i></i><span>Trademark registration</span><i></i></div></div></div>
+    <div class="mq mq-b"><div class="mq-track"><div><span>Single Window</span><i></i><span>Ministry of Commerce and Industry</span><i></i><span>Ministry of Labour</span><i></i><span>Ministry of Interior</span><i></i><span>General Tax Authority</span><i></i><span>Qatar Chamber</span><i></i></div><div><span>Single Window</span><i></i><span>Ministry of Commerce and Industry</span><i></i><span>Ministry of Labour</span><i></i><span>Ministry of Interior</span><i></i><span>General Tax Authority</span><i></i><span>Qatar Chamber</span><i></i></div></div></div>
+  </div>
 
   <!-- WHO WE ARE -->
   <section class="sec intro">
-    <div class="wrap intro-grid">
-      <aside class="intro-side">
-        <h2 class="eyebrow rv">Who is behind Primeway</h2>
-        <p class="intro-clock rv"><i aria-hidden="true"></i><span>Doha, Qatar</span><time data-clock></time></p>
-      </aside>
-      <div class="intro-main">
-        <p class="fill statement">We started because small business owners kept losing weeks to simple mistakes: a wrong activity code, a document that was not attested, a renewal that was missed by two days. Our job is to prevent those.</p>
-        <!-- TODO: owner name, years in PRO work and one line of background, once the client confirms -->
-        <div class="intro-foot">
-          <p class="rv">Primeway for Trading and Services is a Qatar based company that does government paperwork for other companies.</p>
-          <a class="btn-pill rv" href="/about/"><span>More about us</span><i aria-hidden="true"><svg viewBox="0 0 16 16" width="16" height="16"><path d="M3 8h10M9 4l4 4-4 4" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></i></a>
-        </div>
+    <div class="wrap intro-in">
+      <h2 class="kicker rv">Who is behind Primeway</h2>
+      <p class="fill">We started because small business owners kept losing weeks to simple mistakes: a wrong activity code, a document that was not attested, a renewal that was missed by two days. Our job is to prevent those.</p>
+      <div class="intro-foot rv">
+        <p>Primeway for Trading and Services is a Qatar based company that does government paperwork for other companies.</p>
+        <a class="btn btn-dark" href="/about/" data-magnet><span class="btn-t">More about us</span><span class="btn-i"><svg class="ic" aria-hidden="true"><use href="#i-arrow"/></svg></span></a>
       </div>
     </div>
   </section>
 
-  <!-- WHAT WE HELP WITH -->
-  <section class="services">
+  <!-- SERVICES -->
+  <section class="sec services" id="services">
     <div class="wrap">
-      <div class="sv-head">
-        <div>
-          <p class="eyebrow rv">Services</p>
-          <h2 class="display-s split">What we help with</h2>
-        </div>
-        <p class="rv">Most people come to us for one of these four things.</p>
+      <div class="head">
+        <div><p class="kicker rv">Services</p><h2 class="h-xl split">What we help <em>with</em></h2></div>
+        <p class="rv">From the first trade name to the last renewal. Pick what you need today.</p>
       </div>
-      <div class="stack">
-        <article class="card" style="--i:0">
-          <div class="card-in">
-            <div class="card-text">
-              <div class="card-top"><span class="card-num"></span><span class="card-arrow" aria-hidden="true"><svg viewBox="0 0 16 16" width="18" height="18"><path d="M3 8h10M9 4l4 4-4 4" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></span></div>
-              <div>
-                <h3><a href="/company-formation-qatar/">Company formation</a></h3>
-                <p><b>Pick the right type of company, prepare the documents and get the commercial registration and licence.</b> LLC, free zone, QFC, representative office and e-commerce licence. Also company share sale and transfer, and corporate bank account opening.</p>
-                <a class="pill-link card-more" href="/company-formation-qatar/"><span>Learn more</span><svg viewBox="0 0 16 16" width="14" height="14" aria-hidden="true"><path d="M3 8h10M9 4l4 4-4 4" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
-              </div>
-            </div>
-            <div class="img-wrap" data-parallax><img src="/static/img/doha/skyline-day-1920.webp" srcset="/static/img/doha/skyline-day-960.webp 960w, /static/img/doha/skyline-day-1920.webp 1920w" sizes="(max-width:960px) 100vw, 50vw" alt="" loading="lazy" decoding="async"></div>
-          </div>
-        </article>
-        <article class="card" style="--i:1">
-          <div class="card-in">
-            <div class="card-text">
-              <div class="card-top"><span class="card-num"></span><span class="card-arrow" aria-hidden="true"><svg viewBox="0 0 16 16" width="18" height="18"><path d="M3 8h10M9 4l4 4-4 4" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></span></div>
-              <div>
-                <h3><a href="/pro-services-qatar/">PRO services</a></h3>
-                <p><b>Labour, Interior, Single Window, tax, Chamber, renewals and company cancellation,</b> in monthly or yearly packages, for companies that do not want a full time person standing in queues.</p>
-                <a class="pill-link card-more" href="/pro-services-qatar/"><span>Learn more</span><svg viewBox="0 0 16 16" width="14" height="14" aria-hidden="true"><path d="M3 8h10M9 4l4 4-4 4" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
-              </div>
-            </div>
-            <div class="img-wrap" data-parallax><img src="/static/img/doha/west-bay-towers-1920.webp" srcset="/static/img/doha/west-bay-towers-960.webp 960w, /static/img/doha/west-bay-towers-1920.webp 1920w" sizes="(max-width:960px) 100vw, 50vw" alt="" loading="lazy" decoding="async"></div>
-          </div>
-        </article>
-        <article class="card" style="--i:2">
-          <div class="card-in">
-            <div class="card-text">
-              <div class="card-top"><span class="card-num"></span><span class="card-arrow" aria-hidden="true"><svg viewBox="0 0 16 16" width="18" height="18"><path d="M3 8h10M9 4l4 4-4 4" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></span></div>
-              <div>
-                <h3><a href="/visa-services-qatar/">Visas and cards</a></h3>
-                <p><b>Work visas, residence permits, Qatar ID</b> and the paperwork behind each of them.</p>
-                <a class="pill-link card-more" href="/visa-services-qatar/"><span>Learn more</span><svg viewBox="0 0 16 16" width="14" height="14" aria-hidden="true"><path d="M3 8h10M9 4l4 4-4 4" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
-              </div>
-            </div>
-            <div class="img-wrap" data-parallax><img src="/static/img/doha/towers-close-1920.webp" srcset="/static/img/doha/towers-close-960.webp 960w, /static/img/doha/towers-close-1920.webp 1920w" sizes="(max-width:960px) 100vw, 50vw" alt="" loading="lazy" decoding="async"></div>
-          </div>
-        </article>
-        <article class="card" style="--i:3">
-          <div class="card-in">
-            <div class="card-text">
-              <div class="card-top"><span class="card-num"></span><span class="card-arrow" aria-hidden="true"><svg viewBox="0 0 16 16" width="18" height="18"><path d="M3 8h10M9 4l4 4-4 4" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></span></div>
-              <div>
-                <h3><a href="/document-attestation-qatar/">Documents and trademarks</a></h3>
-                <p><b>Attestation, legal translation and trademark registration,</b> handled with the right office in the right order.</p>
-                <p class="svc-more"><a class="text-link" href="/document-attestation-qatar/">Document attestation and translation</a><a class="text-link" href="/trademark-registration-qatar/">Trademark registration</a></p>
-                <a class="pill-link card-more" href="/document-attestation-qatar/"><span>Learn more</span><svg viewBox="0 0 16 16" width="14" height="14" aria-hidden="true"><path d="M3 8h10M9 4l4 4-4 4" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
-              </div>
-            </div>
-            <div class="img-wrap" data-parallax><img src="/static/img/doha/museum-skyline-1920.webp" srcset="/static/img/doha/museum-skyline-960.webp 960w, /static/img/doha/museum-skyline-1920.webp 1920w" sizes="(max-width:960px) 100vw, 50vw" alt="" loading="lazy" decoding="async"></div>
-          </div>
-        </article>
+      <div class="bento">
+        <a class="tile t-xl photo rv" href="/company-formation-qatar/" data-tilt><span class="tile-photo"><img src="/static/img/doha/lusail-towers-1920.webp" srcset="/static/img/doha/lusail-towers-960.webp 960w, /static/img/doha/lusail-towers-1920.webp 1920w" sizes="(max-width:800px) 100vw, 50vw" alt="" decoding="async" loading="lazy"></span><span class="tile-ic"><svg class="ic" aria-hidden="true"><use href="#i-building"/></svg></span><span class="tile-go"><svg class="ic" aria-hidden="true"><use href="#i-up"/></svg></span><h3>Company formation</h3><p>Pick the right type of company, prepare the documents and get the commercial registration and licence.</p></a>
+        <a class="tile t-teal rv" href="/pro-services-qatar/" data-tilt><span class="tile-ic"><svg class="ic" aria-hidden="true"><use href="#i-briefcase"/></svg></span><span class="tile-go"><svg class="ic" aria-hidden="true"><use href="#i-up"/></svg></span><h3>PRO services</h3><p>Labour, Interior, Single Window, tax, Chamber and renewals, in monthly or yearly packages.</p></a>
+        <a class="tile t-gold rv" href="/visa-services-qatar/" data-tilt><span class="tile-ic"><svg class="ic" aria-hidden="true"><use href="#i-passport"/></svg></span><span class="tile-go"><svg class="ic" aria-hidden="true"><use href="#i-up"/></svg></span><h3>Visa services</h3><p>Work visas, residence permits, Qatar ID and the paperwork behind each of them.</p></a>
+        <a class="tile  rv" href="/document-attestation-qatar/" data-tilt><span class="tile-ic"><svg class="ic" aria-hidden="true"><use href="#i-stamp"/></svg></span><span class="tile-go"><svg class="ic" aria-hidden="true"><use href="#i-up"/></svg></span><h3>Document attestation</h3><p>Handled with the right office in the right order.</p></a>
+        <a class="tile  rv" href="/document-attestation-qatar/#translation-legal-translation-in-qatar" data-tilt><span class="tile-ic"><svg class="ic" aria-hidden="true"><use href="#i-translate"/></svg></span><span class="tile-go"><svg class="ic" aria-hidden="true"><use href="#i-up"/></svg></span><h3>Legal translation</h3><p>Arabic translation for your foreign documents.</p></a>
+        <a class="tile t-wide photo rv" href="/company-formation-qatar/100-percent-foreign-ownership/" data-tilt><span class="tile-photo"><img src="/static/img/doha/skyline-dusk-1920.webp" srcset="/static/img/doha/skyline-dusk-960.webp 960w, /static/img/doha/skyline-dusk-1920.webp 1920w" sizes="(max-width:800px) 100vw, 50vw" alt="" decoding="async" loading="lazy"></span><span class="tile-ic"><svg class="ic" aria-hidden="true"><use href="#i-percent"/></svg></span><span class="tile-go"><svg class="ic" aria-hidden="true"><use href="#i-up"/></svg></span><h3>100% foreign ownership</h3><p>Open in most sectors, with approval from the Ministry of Commerce and Industry.</p></a>
+        <a class="tile  rv" href="/trademark-registration-qatar/" data-tilt><span class="tile-ic"><svg class="ic" aria-hidden="true"><use href="#i-shield"/></svg></span><span class="tile-go"><svg class="ic" aria-hidden="true"><use href="#i-up"/></svg></span><h3>Trademark registration</h3><p>Protect the name and brand you sell under.</p></a>
+        <a class="tile  rv" href="/company-formation-qatar/#corporate-bank-account-opening-in-qatar" data-tilt><span class="tile-ic"><svg class="ic" aria-hidden="true"><use href="#i-bank"/></svg></span><span class="tile-go"><svg class="ic" aria-hidden="true"><use href="#i-up"/></svg></span><h3>Bank account opening</h3><p>The full set of papers prepared before you apply.</p></a>
+        <a class="tile  rv" href="/company-formation-qatar/#company-share-sale-and-transfer-in-qatar" data-tilt><span class="tile-ic"><svg class="ic" aria-hidden="true"><use href="#i-swap"/></svg></span><span class="tile-go"><svg class="ic" aria-hidden="true"><use href="#i-up"/></svg></span><h3>Share sale and transfer</h3><p>Change partners and update every company record.</p></a>
+        <a class="tile  rv" href="/company-formation-qatar/#e-commerce-licence-in-qatar" data-tilt><span class="tile-ic"><svg class="ic" aria-hidden="true"><use href="#i-cart"/></svg></span><span class="tile-go"><svg class="ic" aria-hidden="true"><use href="#i-up"/></svg></span><h3>E-commerce licence</h3><p>For websites, apps and social media shops.</p></a>
+        <a class="tile  rv" href="/company-formation-qatar/#free-zone-company-in-qatar" data-tilt><span class="tile-ic"><svg class="ic" aria-hidden="true"><use href="#i-globe"/></svg></span><span class="tile-go"><svg class="ic" aria-hidden="true"><use href="#i-up"/></svg></span><h3>Free zone company</h3><p>For export, storage, logistics and technology.</p></a>
+        <a class="tile t-navy rv" href="/pro-services-qatar/#company-cancellation-liquidation-in-qatar" data-tilt><span class="tile-ic"><svg class="ic" aria-hidden="true"><use href="#i-close"/></svg></span><span class="tile-go"><svg class="ic" aria-hidden="true"><use href="#i-up"/></svg></span><h3>Company cancellation</h3><p>Close a company properly when the time comes.</p></a>
       </div>
     </div>
   </section>
 
-  <!-- CTA-C -->
-  <section class="band">
-    <div class="band-glow a" aria-hidden="true"></div>
-    <div class="band-glow b" aria-hidden="true"></div>
-    <div class="wrap band-in">
-      <div class="band-rule" aria-hidden="true"></div>
-      <div class="band-grid">
-        <h2 class="band-h lines">
-          <span class="ln" style="--i:0"><span>Start with a</span></span>
-          <span class="ln" style="--i:1"><span><span class="grad">free consultation</span></span></span>
-        </h2>
-        <div class="band-side">
-          <p class="rv">Ten minutes on the phone is usually enough to know what you need.</p>
-          <div class="rv" style="--d:1"><a class="btn-pill" data-magnet href="#enquiry"><span>Book a call</span><i aria-hidden="true"><svg viewBox="0 0 16 16" width="16" height="16"><path d="M3 8h10M9 4l4 4-4 4" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></i></a></div>
-        </div>
-      </div>
+  <!-- NUMBERS -->
+  <section class="sec numbers">
+    <div class="wrap num-grid">
+      <div class="num rv"><p><b data-count="100">100</b><sup>%</sup></p><span>Foreign ownership possible in most sectors, with ministry approval</span></div>
+      <div class="num rv"><p><b data-count="0">0</b><sup>%</sup></p><span>Personal income tax on salaries</span></div>
+      <div class="num rv"><p><b data-count="10">10</b><sup>%</sup></p><span>Flat corporate tax on taxable profit under the general regime</span></div>
+      <div class="num rv"><p><b data-count="8">8</b></p><span>Clear steps from trade name to staff visas on the mainland</span></div>
     </div>
   </section>
 
-  <!-- EXPECT -->
-  <section class="sec expect">
-    <div class="wrap">
-      <div class="ex-head">
-        <div>
-          <p class="eyebrow rv">Working with us</p>
-          <h2 class="display split">What you can expect from us</h2>
-        </div>
+  <!-- ROUTE -->
+  <section class="route" aria-labelledby="route-h">
+    <div class="route-pin">
+      <div class="wrap route-head">
+        <div><p class="kicker">How it works</p><h2 class="h-xl" id="route-h">Your route to an <em>open business</em></h2></div>
+        <p>You tell us what you want to do. We give you the route, documents and cost in writing, then prepare and submit everything.</p>
       </div>
-      <ul class="expect-list">
-        <li class="rv"><strong>One person on your file from the first call to the last card.</strong><p>You do not get passed around.</p></li>
-        <li class="rv"><strong>The cost in writing before we start.</strong><p>Government fees are listed separately from our fee.</p></li>
-        <li class="rv"><strong>A list of documents on day one,</strong><p>so you only collect things once.</p></li>
-        <li class="rv"><strong>A reminder before every renewal.</strong><p>Licences, cards and tax filings all have dates.</p></li>
-        <li class="rv"><strong>Straight answers.</strong><p>If a route will not work for your business, we say so.</p></li>
-      </ul>
-    </div>
-  </section>
-
-  <!-- HOW IT WORKS -->
-  <section class="sec route">
-    <div class="wrap">
-      <div class="route-head">
-        <p class="eyebrow rv">Process</p>
-        <h2 class="display-s split">How it works</h2>
+      <div class="route-view">
+        <ol class="route-track">
+          <li><span class="st-n">01</span><h3>Reserve a trade name</h3><p>Through Single Window.</p></li>
+          <li><span class="st-n">02</span><h3>Sign the memorandum</h3><p>Prepare the memorandum of association and sign it, digitally or before a notary.</p></li>
+          <li><span class="st-n">03</span><h3>Commercial registration</h3><p>Register the company and receive the CR.</p></li>
+          <li><span class="st-n">04</span><h3>Commercial licence</h3><p>Get the licence or permit for your activity.</p></li>
+          <li><span class="st-n">05</span><h3>Establishment card</h3><p>Receive the establishment registration card.</p></li>
+          <li><span class="st-n">06</span><h3>Tax card</h3><p>Register with the General Tax Authority through Dhareeba.</p></li>
+          <li><span class="st-n">07</span><h3>Bank account</h3><p>Open a corporate bank account.</p></li>
+          <li><span class="st-n">08</span><h3>Visas and Qatar IDs</h3><p>Apply for work visas and Qatar IDs for staff.</p></li>
+        </ol>
       </div>
-      <ol class="steps">
-        <li style="--k:0"><span class="step-num">01</span><p><span class="b">You tell us what you want to do.</span> <span class="d">A call or a WhatsApp message is enough.</span></p></li>
-        <li style="--k:1"><span class="step-num">02</span><p><span class="b">We tell you the route,</span> <span class="d">the documents and the cost in writing.</span></p></li>
-        <li style="--k:2"><span class="step-num">03</span><p><span class="b">You send the documents.</span> <span class="d">We prepare, sign off and submit everything to the ministries.</span></p></li>
-        <li style="--k:3"><span class="step-num">04</span><p><span class="b">You receive the licence, cards and certificates.</span> <span class="d">We keep a reminder for every renewal.</span></p></li>
-      </ol>
+      <div class="wrap"><div class="route-bar" aria-hidden="true"><i></i></div></div>
     </div>
   </section>
 
   <!-- COMPANY TYPES -->
   <section class="sec types">
-    <div class="wrap types-grid">
-      <div class="types-photo">
-        <div class="img-wrap types-imgs">
-          <img src="/static/img/doha/lusail-towers-1920.webp" srcset="/static/img/doha/lusail-towers-960.webp 960w, /static/img/doha/lusail-towers-1920.webp 1920w" sizes="(max-width:960px) 100vw, 45vw" alt="" loading="lazy" decoding="async">
-          <img src="/static/img/doha/panorama-night-1920.webp" srcset="/static/img/doha/panorama-night-960.webp 960w, /static/img/doha/panorama-night-1920.webp 1920w" sizes="(max-width:960px) 100vw, 45vw" alt="" loading="lazy" decoding="async">
-          <img src="/static/img/doha/night-moon-1920.webp" srcset="/static/img/doha/night-moon-960.webp 960w, /static/img/doha/night-moon-1920.webp 1920w" sizes="(max-width:960px) 100vw, 45vw" alt="" loading="lazy" decoding="async">
-          <img src="/static/img/doha/panorama-calm-1920.webp" srcset="/static/img/doha/panorama-calm-960.webp 960w, /static/img/doha/panorama-calm-1920.webp 1920w" sizes="(max-width:960px) 100vw, 45vw" alt="" loading="lazy" decoding="async">
-        </div>
-        <p class="types-cap" aria-hidden="true"><span class="tc-n">01</span><span class="tc-name">LLC on the mainland</span><span class="tc-of">01 / 04</span></p>
+    <div class="wrap">
+      <div class="head">
+        <div><p class="kicker rv">Company types</p><h2 class="h-xl split">Which type of company <em>fits you?</em></h2></div>
+        <p class="rv">This is the first question and it decides everything after it. Here is the short version.</p>
       </div>
-      <div class="types-body">
-        <p class="eyebrow rv">Company types</p>
-        <h2 class="display-s lines">
-          <span class="ln" style="--i:0"><span>Which type of company</span></span>
-          <span class="ln" style="--i:1"><span class="dim">fits you?</span></span>
-        </h2>
-        <p class="rv types-lead">This is the first question and it decides everything after it. Here is the short version.</p>
-        <div class="types-list">
-        <details name="types" open>
-          <summary><span class="t-name">LLC on the mainland</span></summary>
-          <div><p>The usual choice if you want to sell to customers anywhere in Qatar.</p>
-            <a class="pill-link" href="/company-formation-qatar/llc/"><span>LLC in Qatar</span><svg viewBox="0 0 16 16" width="14" height="14" aria-hidden="true"><path d="M3 8h10M9 4l4 4-4 4" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></a></div>
-        </details>
-        <details name="types">
-          <summary><span class="t-name">Free zone company</span></summary>
-          <div><p>Good for export, storage and some service businesses, with limits on selling inside Qatar.</p>
-            <a class="pill-link" href="/company-formation-qatar/#free-zone-company-in-qatar"><span>Free zone section</span><svg viewBox="0 0 16 16" width="14" height="14" aria-hidden="true"><path d="M3 8h10M9 4l4 4-4 4" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></a></div>
-        </details>
-        <details name="types">
-          <summary><span class="t-name">Qatar Financial Centre (QFC)</span></summary>
-          <div><p>For financial, professional and some corporate services.</p>
-            <a class="pill-link" href="/company-formation-qatar/#qatar-financial-centre-qfc-company-setup"><span>QFC section</span><svg viewBox="0 0 16 16" width="14" height="14" aria-hidden="true"><path d="M3 8h10M9 4l4 4-4 4" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></a></div>
-        </details>
-        <details name="types">
-          <summary><span class="t-name">Representative office</span></summary>
-          <div><p>For a foreign company that wants to explore the market, not sell.</p>
-            <a class="pill-link" href="/company-formation-qatar/#representative-office-in-qatar"><span>Representative office section</span><svg viewBox="0 0 16 16" width="14" height="14" aria-hidden="true"><path d="M3 8h10M9 4l4 4-4 4" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></a></div>
-        </details>
+      <div class="panels rv">
+        <article class="panel on" tabindex="0"><img src="/static/img/doha/west-bay-towers-1920.webp" srcset="/static/img/doha/west-bay-towers-960.webp 960w, /static/img/doha/west-bay-towers-1920.webp 1920w" sizes="(max-width:900px) 100vw, 60vw" alt="" decoding="async" loading="lazy"><span class="panel-n">01</span><div class="panel-body"><h3>LLC on the mainland</h3><div class="panel-more"><div><p>The usual choice if you want to sell to customers anywhere in Qatar.</p><a class="btn btn-light btn-sm" href="/company-formation-qatar/llc/" data-magnet><span class="btn-t">LLC in Qatar</span><span class="btn-i"><svg class="ic" aria-hidden="true"><use href="#i-arrow"/></svg></span></a></div></div></div></article>
+        <article class="panel" tabindex="0"><img src="/static/img/doha/museum-skyline-1920.webp" srcset="/static/img/doha/museum-skyline-960.webp 960w, /static/img/doha/museum-skyline-1920.webp 1920w" sizes="(max-width:900px) 100vw, 60vw" alt="" decoding="async" loading="lazy"><span class="panel-n">02</span><div class="panel-body"><h3>Free zone company</h3><div class="panel-more"><div><p>Good for export, storage and some service businesses, with limits on selling inside Qatar.</p><a class="btn btn-light btn-sm" href="/company-formation-qatar/#free-zone-company-in-qatar" data-magnet><span class="btn-t">Free zone section</span><span class="btn-i"><svg class="ic" aria-hidden="true"><use href="#i-arrow"/></svg></span></a></div></div></div></article>
+        <article class="panel" tabindex="0"><img src="/static/img/doha/night-moon-1920.webp" srcset="/static/img/doha/night-moon-960.webp 960w, /static/img/doha/night-moon-1920.webp 1920w" sizes="(max-width:900px) 100vw, 60vw" alt="" decoding="async" loading="lazy"><span class="panel-n">03</span><div class="panel-body"><h3>Qatar Financial Centre (QFC)</h3><div class="panel-more"><div><p>For financial, professional and some corporate services.</p><a class="btn btn-light btn-sm" href="/company-formation-qatar/#qatar-financial-centre-qfc-company-setup" data-magnet><span class="btn-t">QFC section</span><span class="btn-i"><svg class="ic" aria-hidden="true"><use href="#i-arrow"/></svg></span></a></div></div></div></article>
+        <article class="panel" tabindex="0"><img src="/static/img/doha/towers-close-1920.webp" srcset="/static/img/doha/towers-close-960.webp 960w, /static/img/doha/towers-close-1920.webp 1920w" sizes="(max-width:900px) 100vw, 60vw" alt="" decoding="async" loading="lazy"><span class="panel-n">04</span><div class="panel-body"><h3>Representative office</h3><div class="panel-more"><div><p>For a foreign company that wants to explore the market, not sell.</p><a class="btn btn-light btn-sm" href="/company-formation-qatar/#representative-office-in-qatar" data-magnet><span class="btn-t">Representative office section</span><span class="btn-i"><svg class="ic" aria-hidden="true"><use href="#i-arrow"/></svg></span></a></div></div></div></article>
+      </div>
+      <p class="note rv">Not sure? Send us two lines about your business and we will tell you which one fits. <a href="/contact/">Contact us</a></p>
+    </div>
+  </section>
+
+  <!-- PLANNER -->
+  <section class="sec planner" id="planner">
+    <div class="wrap">
+      <div class="head">
+        <div><p class="kicker rv">Setup planner</p><h2 class="h-xl split">Build your plan in <em>one minute</em></h2></div>
+        <p class="rv">Choose what fits you and see the documents to collect. Send it to us for a written quote.</p>
+      </div>
+      <div class="pl-grid">
+        <form class="pl-form rv" onsubmit="return false">
+          <fieldset><legend><i>1</i>Company type</legend><div class="chips"><label class="chip"><input type="radio" name="type" value="llc" checked><span>LLC on the mainland</span></label><label class="chip"><input type="radio" name="type" value="fz"><span>Free zone</span></label><label class="chip"><input type="radio" name="type" value="qfc"><span>QFC</span></label><label class="chip"><input type="radio" name="type" value="rep"><span>Representative office</span></label><label class="chip"><input type="radio" name="type" value="ecom"><span>E-commerce licence</span></label></div></fieldset>
+          <fieldset><legend><i>2</i>Who will own it?</legend><div class="chips"><label class="chip"><input type="radio" name="owner" value="res" checked><span>People living in Qatar</span></label><label class="chip"><input type="radio" name="owner" value="abroad"><span>People abroad</span></label><label class="chip"><input type="radio" name="owner" value="corp"><span>A company</span></label></div></fieldset>
+          <fieldset><legend><i>3</i>Anything else?</legend><div class="chips"><label class="chip"><input type="checkbox" name="extra" value="visa"><span>Work visas</span></label><label class="chip"><input type="checkbox" name="extra" value="attest"><span>Attestation</span></label><label class="chip"><input type="checkbox" name="extra" value="trans"><span>Legal translation</span></label><label class="chip"><input type="checkbox" name="extra" value="tm"><span>Trademark</span></label><label class="chip"><input type="checkbox" name="extra" value="bank"><span>Bank account</span></label></div></fieldset>
+        </form>
+        <div class="pl-out rv" aria-live="polite">
+          <p class="pl-label">Your starting checklist</p>
+          <h3 class="pl-title">LLC on the mainland</h3>
+          <p class="pl-note"></p>
+          <ul class="pl-list"></ul>
+          <p class="pl-fee">Government fees and our service fee are quoted in writing, listed separately, before we start.</p>
+          <div class="pl-actions">
+            <button type="button" class="btn btn-gold pl-send" data-magnet><span class="btn-t">Get a written quote</span><span class="btn-i"><svg class="ic" aria-hidden="true"><use href="#i-arrow"/></svg></span></button>
+          </div>
         </div>
-        <p class="chapter-note">Not sure? Send us two lines about your business and we will tell you which one fits. <a href="/contact/">Contact us</a></p>
       </div>
     </div>
   </section>
 
   <!-- FOREIGN OWNERS -->
   <section class="sec foreign">
-    <div class="wrap fo-wrap">
-      <div class="fo-top">
-        <p class="eyebrow rv">Foreign ownership</p>
-        <p class="fo-tag rv">Law No. 1 of 2019</p>
-      </div>
-      <div class="fo-hero">
-        <p class="big-100" aria-hidden="true"><span class="count" data-to="100">100</span><sup>%</sup></p>
-      </div>
+    <div class="wrap">
+      <div class="fo-tags rv"><p class="kicker">Foreign ownership</p><p class="pill">Law No. 1 of 2019</p></div>
+      <p class="big100" aria-hidden="true">100%</p>
       <div class="fo-cols">
-        <div class="fo-col">
-          <h2 class="fo-h lines">
-            <span class="ln" style="--i:0"><span>Can a foreigner own 100 percent</span></span>
-            <span class="ln" style="--i:1"><span class="dim">of a company in Qatar?</span></span>
-          </h2>
-        </div>
-        <div class="fo-col">
-          <p class="fo-lead rv"><b>In most sectors, yes.</b> Since Law No. 1 of 2019, foreign investors can hold full ownership of a company with approval from the Ministry of Commerce and Industry. A few sectors, such as banking and insurance, have their own rules. We explain how it works and what the ministry looks at.</p>
-        </div>
-        <div class="fo-col">
-          <dl class="fo-specs rv">
-            <div><dt>Law</dt><dd>No. 1 of 2019</dd></div>
-            <div><dt>Approval</dt><dd>Ministry of Commerce and Industry</dd></div>
-            <div><dt>Own rules</dt><dd>Banking and insurance</dd></div>
-          </dl>
-          <a class="fo-link rv" href="/company-formation-qatar/100-percent-foreign-ownership/"><span>100 percent foreign ownership in Qatar</span><i aria-hidden="true"><svg viewBox="0 0 16 16" width="18" height="18" aria-hidden="true"><path d="M3 8h10M9 4l4 4-4 4" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></i></a>
+        <h2 class="h-l split">Can a foreigner own 100 percent of a company in <em>Qatar?</em></h2>
+        <div class="rv">
+          <p><b>In most sectors, yes.</b> Since Law No. 1 of 2019, foreign investors can hold full ownership of a company with approval from the Ministry of Commerce and Industry. A few sectors, such as banking and insurance, have their own rules. We explain how it works and what the ministry looks at.</p>
+          <a class="btn btn-dark" href="/company-formation-qatar/100-percent-foreign-ownership/" data-magnet><span class="btn-t">100 percent foreign ownership</span><span class="btn-i"><svg class="ic" aria-hidden="true"><use href="#i-arrow"/></svg></span></a>
         </div>
       </div>
     </div>
   </section>
 
+  <!-- PROMISES -->
+  <section class="sec promises">
+    <div class="wrap prom-grid">
+      <div class="prom-head">
+        <p class="kicker rv">Working with us</p>
+        <h2 class="h-xl split">What you can expect <em>from us</em></h2>
+        <div class="rv"><a class="btn btn-gold" href="#enquiry" data-magnet><span class="btn-t">Book a call</span><span class="btn-i"><svg class="ic" aria-hidden="true"><use href="#i-phone"/></svg></span></a></div>
+      </div>
+      <ol class="prom-list">
+        <li class="promise" style="--i:0"><span>01</span><h3>One person on your file</h3><p>From the first call to the last card. You do not get passed around.</p></li>
+        <li class="promise" style="--i:1"><span>02</span><h3>The cost in writing</h3><p>Before we start. Government fees are listed separately from our fee.</p></li>
+        <li class="promise" style="--i:2"><span>03</span><h3>One list of documents</h3><p>On day one, so you only collect things once.</p></li>
+        <li class="promise" style="--i:3"><span>04</span><h3>A reminder before every renewal</h3><p>Licences, cards and tax filings all have dates.</p></li>
+        <li class="promise" style="--i:4"><span>05</span><h3>Straight answers</h3><p>If a route will not work for your business, we say so.</p></li>
+      </ol>
+    </div>
+  </section>
+
   <!-- WHY QATAR -->
-  <section class="sec why">
+  <section class="why">
+    <div class="why-bg" data-parallax><img src="/static/img/doha/night-moon-1920.webp" srcset="/static/img/doha/night-moon-960.webp 960w, /static/img/doha/night-moon-1920.webp 1920w" sizes="100vw" alt="" decoding="async" loading="lazy"></div>
     <div class="wrap">
-      <p class="eyebrow rv">Why Qatar</p>
-      <h2 class="display-s lines">
-        <span class="ln" style="--i:0"><span>Why start a company</span></span>
-        <span class="ln" style="--i:1"><span class="dim">in Qatar</span></span>
-      </h2>
+      <p class="kicker rv">Why Qatar</p>
+      <h2 class="h-xl split">Why start a company <em>in Qatar</em></h2>
       <!-- TODO: client to approve these four lines before launch -->
       <ul class="why-list">
-        <li class="rv" style="--d:0"><p><b>No personal income tax</b> <span>on salaries.</span></p></li>
-        <li class="rv" style="--d:1"><p><b>A flat 10 percent corporate tax</b> <span>on taxable profit under the general regime.</span></p></li>
-        <li class="rv" style="--d:2"><p><b>Most services for starting a company are online</b> <span>through Single Window.</span></p></li>
-        <li class="rv" style="--d:3"><p><b>A steady flow of projects,</b> <span>from construction to retail to services.</span></p></li>
+        <li class="rv"><svg class="ic" aria-hidden="true"><use href="#i-percent"/></svg><p><b>No personal income tax</b> on salaries.</p></li>
+        <li class="rv" style="--d:1"><svg class="ic" aria-hidden="true"><use href="#i-bank"/></svg><p><b>A flat 10 percent corporate tax</b> on taxable profit under the general regime.</p></li>
+        <li class="rv" style="--d:2"><svg class="ic" aria-hidden="true"><use href="#i-globe"/></svg><p><b>Most services for starting a company are online</b> through Single Window.</p></li>
+        <li class="rv" style="--d:3"><svg class="ic" aria-hidden="true"><use href="#i-building"/></svg><p><b>A steady flow of projects,</b> from construction to retail to services.</p></li>
       </ul>
     </div>
   </section>
 
   <!-- FAQ -->
-  <section class="sec faq-section" id="faq">
+  <section class="sec faq" id="faq">
     <div class="wrap faq-grid">
       <div class="faq-head">
-        <p class="eyebrow rv">FAQ</p>
-        <h2 class="display-s lines">
-          <span class="ln" style="--i:0"><span>Questions we</span></span>
-          <span class="ln" style="--i:1"><span class="dim">hear often</span></span>
-        </h2>
-        <!-- TODO: client to confirm the setup time range and what the fee includes -->
-        <p class="rv faq-ask">Something else on your mind?</p>
-        <a class="btn-pill rv" href="{{ whatsapp_url }}"><span>Ask us on WhatsApp</span><i aria-hidden="true"><svg viewBox="0 0 16 16" width="16" height="16"><path d="M3 8h10M9 4l4 4-4 4" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></i></a>
-        <p class="faq-count" aria-hidden="true"><b>01</b><span>/ 05</span></p>
+        <p class="kicker rv">FAQ</p>
+        <h2 class="h-xl split">Questions we <em>hear often</em></h2>
+        <p class="rv">Something else on your mind?</p>
+        <div class="rv"><a class="btn btn-dark" href="{{ whatsapp_url }}" data-magnet><span class="btn-t">Ask us on WhatsApp</span><span class="btn-i"><svg class="ic" aria-hidden="true"><use href="#i-chat"/></svg></span></a></div>
       </div>
-      <div class="faq">
-        <details class="faq-item" name="faq" open>
-          <summary>How long does it take to set up a company in Qatar?</summary>
-          <p>For a standard mainland LLC with all documents ready, it often takes a few weeks from trade name to licence. Delays usually come from missing attestations or activity approvals. We give you a realistic range after we hear your business details.</p>
-        </details>
-        <details class="faq-item" name="faq">
-          <summary>Do I need to be in Qatar to start a company?</summary>
-          <p>Not for every step. Many steps are online and some can be done by power of attorney. You will need to sign the incorporation papers, either in person, digitally through Single Window or through an authorised signatory. We tell you which applies to you.</p>
-        </details>
-        <details class="faq-item" name="faq">
-          <summary>What does your fee include?</summary>
-          <p>We give you a written quote that separates our fee from government fees.</p>
-        </details>
-        <details class="faq-item" name="faq">
-          <summary>Do you work with people outside Qatar?</summary>
-          <p>Yes. Many of our clients start the process from abroad. We work through email and WhatsApp and share documents by scan first.</p>
-        </details>
-        <details class="faq-item" name="faq">
-          <summary>Can you take care of renewals later?</summary>
-          <p>Yes. We keep your renewal dates and start the paperwork before they run out.</p>
-        </details>
+      <div class="qa-list">
+        <details class="qa rv" name="faq" open><summary><i>01</i><span>How long does it take to set up a company in Qatar?</span></summary><div><p>For a standard mainland LLC with all documents ready, it often takes a few weeks from trade name to licence. Delays usually come from missing attestations or activity approvals. We give you a realistic range after we hear your business details.</p></div></details>
+        <details class="qa rv" name="faq"><summary><i>02</i><span>Do I need to be in Qatar to start a company?</span></summary><div><p>Not for every step. Many steps are online and some can be done by power of attorney. You will need to sign the incorporation papers, either in person, digitally through Single Window or through an authorised signatory. We tell you which applies to you.</p></div></details>
+        <details class="qa rv" name="faq"><summary><i>03</i><span>What does your fee include?</span></summary><div><p>We give you a written quote that separates our fee from government fees.</p></div></details>
+        <details class="qa rv" name="faq"><summary><i>04</i><span>Do you work with people outside Qatar?</span></summary><div><p>Yes. Many of our clients start the process from abroad. We work through email and WhatsApp and share documents by scan first.</p></div></details>
+        <details class="qa rv" name="faq"><summary><i>05</i><span>Can you take care of renewals later?</span></summary><div><p>Yes. We keep your renewal dates and start the paperwork before they run out.</p></div></details>
       </div>
     </div>
   </section>
 
-  <!-- CTA-A -->
   {{ include:_enquiry-cta.html }}
 
   <script type="application/ld+json">
